@@ -7,7 +7,8 @@
 --   profiles     — one row per logged-in user, created on approval
 --
 -- Everything is protected by row level security. The roster is NEVER
--- readable by the public: anonymous visitors can only INSERT an application.
+-- readable by the public, and applications are written server-side only.
+-- Safe to re-run.
 
 -- ---------------------------------------------------------------------------
 -- residents: the private roster
@@ -35,7 +36,14 @@ create index if not exists residents_address_key_idx
 -- ---------------------------------------------------------------------------
 -- applications: resident requests for portal access
 -- ---------------------------------------------------------------------------
-create type public.application_status as enum ('pending', 'approved', 'rejected');
+-- CREATE TYPE has no IF NOT EXISTS, so guard it to keep this file re-runnable.
+do $$
+begin
+  if not exists (select 1 from pg_type where typname = 'application_status') then
+    create type public.application_status as enum ('pending', 'approved', 'rejected');
+  end if;
+end
+$$;
 
 create table if not exists public.applications (
   id             uuid primary key default gen_random_uuid(),
@@ -96,6 +104,15 @@ as $$
     false
   );
 $$;
+
+-- CREATE POLICY has no IF NOT EXISTS either, so drop first.
+drop policy if exists residents_select_authenticated on public.residents;
+drop policy if exists residents_write_admin          on public.residents;
+drop policy if exists applications_select_admin      on public.applications;
+drop policy if exists applications_update_admin      on public.applications;
+drop policy if exists profiles_select_self_or_admin  on public.profiles;
+drop policy if exists profiles_update_self           on public.profiles;
+drop policy if exists profiles_admin_all             on public.profiles;
 
 -- residents: readable by any logged-in portal user; writable by admins only.
 -- Anonymous visitors get nothing.
