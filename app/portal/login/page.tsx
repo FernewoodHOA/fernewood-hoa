@@ -20,6 +20,15 @@ export default async function LoginPage({
       ? candidate
       : "/portal/home";
 
+  const errorRaw = params?.error;
+  const errorCode = Array.isArray(errorRaw) ? errorRaw[0] : errorRaw;
+  const errorMessage =
+    errorCode === "expired_link"
+      ? "That sign-in link has expired or was already used. Request a new one below."
+      : errorCode === "invalid_link"
+        ? "That sign-in link wasn't valid. Request a new one below."
+        : null;
+
   return (
     <div className="mx-auto flex max-w-4xl flex-col gap-6 px-6 py-20">
       <h1 className="text-3xl font-bold tracking-tight text-emerald-950">
@@ -29,6 +38,15 @@ export default async function LoginPage({
         Enter your email and we&apos;ll send you a sign-in link. Accounts are
         created once the board approves your access request.
       </p>
+
+      {errorMessage && (
+        <p
+          role="alert"
+          className="max-w-lg rounded-md border border-amber-300 bg-amber-50 px-3 py-2 text-sm text-amber-900"
+        >
+          {errorMessage}
+        </p>
+      )}
 
       <LoginForm next={next} />
 

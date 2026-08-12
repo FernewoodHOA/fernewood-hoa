@@ -50,15 +50,23 @@ export async function sendMagicLink(
     type: "magiclink",
     email,
     options: {
-      redirectTo: `${origin}/auth/callback?next=${encodeURIComponent(next)}`,
+      redirectTo: `${origin}${next}`,
     },
   });
 
   // Fails when there's no account for that address — which is the expected
   // path for anyone who hasn't been approved. Say nothing revealing.
-  if (error || !data?.properties?.action_link) {
+  if (error || !data?.properties?.hashed_token) {
     return { status: "sent", message: NEUTRAL_MESSAGE };
   }
+
+  // Build our own confirmation URL rather than emailing Supabase's
+  // action_link: that one hands the session back in a URL fragment, which a
+  // server route can never read. /auth/confirm verifies the token server-side
+  // and sets the session cookie.
+  const confirmUrl =
+    `${origin}/auth/confirm?token_hash=${encodeURIComponent(data.properties.hashed_token)}` +
+    `&type=magiclink&next=${encodeURIComponent(next)}`;
 
   await sendBoardEmail({
     to: [email],
@@ -66,7 +74,7 @@ export async function sendMagicLink(
     text: [
       "Here's your sign-in link for the Fernewood resident portal:",
       "",
-      data.properties.action_link,
+      confirmUrl,
       "",
       "This link expires in one hour and can only be used once.",
       "If you didn't request it, you can ignore this email.",

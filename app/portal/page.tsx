@@ -42,12 +42,40 @@ export default function PortalPage() {
           is limited to residents, so every request is reviewed by a board
           member before an account is activated.
         </p>
-        <Link
-          href="/portal/apply"
-          className="rounded-full bg-emerald-800 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-emerald-900"
-        >
-          Request Access
-        </Link>
+
+        <div className="flex flex-col gap-4 rounded-lg border border-emerald-900/10 bg-white p-6 sm:flex-row sm:gap-8">
+          <div className="flex-1">
+            <h2 className="font-semibold text-emerald-950">
+              New here?
+            </h2>
+            <p className="mt-1 text-sm text-stone-600">
+              Request access once. A board member reviews it and you&apos;ll
+              get an email when your account is ready.
+            </p>
+            <Link
+              href="/portal/apply"
+              className="mt-3 inline-block rounded-full bg-emerald-800 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-emerald-900"
+            >
+              Request Access
+            </Link>
+          </div>
+
+          <div className="flex-1 border-t border-emerald-900/10 pt-4 sm:border-l sm:border-t-0 sm:pl-8 sm:pt-0">
+            <h2 className="font-semibold text-emerald-950">
+              Already approved?
+            </h2>
+            <p className="mt-1 text-sm text-stone-600">
+              Sign in with your email. There&apos;s no password — we send you a
+              link each time.
+            </p>
+            <Link
+              href="/portal/login"
+              className="mt-3 inline-block rounded-full border border-emerald-800 px-5 py-2.5 text-sm font-semibold text-emerald-800 transition-colors hover:bg-emerald-50"
+            >
+              Sign In
+            </Link>
+          </div>
+        </div>
       </section>
 
       <section className="grid gap-5 sm:grid-cols-2">
