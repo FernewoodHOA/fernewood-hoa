@@ -21,9 +21,24 @@ export default function ContactPage() {
           Contact the Board
         </h1>
         <p className="mt-3 max-w-2xl text-stone-600">
-          Use the form below to reach the Fernewood Board of Directors. Your
-          message goes to every board member, and whoever is best placed to help
-          will reply to the email address you provide.
+          Use the form below for covenant questions, neighborhood concerns,
+          suggestions, or anything else for the Board. Your message goes to
+          every board member, and whoever is best placed to help will reply to
+          the email address you provide.
+        </p>
+        <p className="mt-2 max-w-2xl text-stone-600">
+          <span className="font-medium text-emerald-950">
+            Questions about dues, payments, or your account balance
+          </span>{" "}
+          are handled by the association&apos;s accounting office — call them
+          directly at{" "}
+          <a
+            href={accountingContact.officeHref}
+            className="font-medium text-emerald-800 hover:text-emerald-900"
+          >
+            {accountingContact.office}
+          </a>
+          .
         </p>
       </div>
 

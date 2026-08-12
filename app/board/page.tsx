@@ -39,26 +39,39 @@ export default function BoardPage() {
       <section className="flex flex-col gap-4">
         <div>
           <h2 className="text-xl font-bold tracking-tight text-emerald-950">
-            Inquiries
+            Where to Send Your Question
           </h2>
-          <p className="mt-1 max-w-xl text-stone-600">
-            All association inquiries are handled by the association&apos;s
-            accounting firm. To send the Board a message directly,{" "}
-            <Link
-              href="/contact"
-              className="font-medium text-emerald-800 underline underline-offset-2 hover:text-emerald-900"
-            >
-              visit the Contact page
-            </Link>
-            . You can also reach us by phone or mail.
+          <p className="mt-1 max-w-2xl text-stone-600">
+            Two different places handle different things — sending it to the
+            right one will get you an answer faster.
           </p>
         </div>
 
         <div className="grid gap-6 sm:grid-cols-2">
+          <div className="rounded-lg border border-emerald-700/30 bg-emerald-50 p-5">
+            <h3 className="text-sm font-semibold uppercase tracking-wide text-emerald-700">
+              Neighborhood matters
+            </h3>
+            <p className="mt-2 text-stone-700">
+              Covenant and restriction questions, neighborhood concerns,
+              suggestions, or anything else for the Board of Directors.
+            </p>
+            <Link
+              href="/contact"
+              className="mt-3 inline-block rounded-full bg-emerald-800 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-emerald-900"
+            >
+              Message the Board
+            </Link>
+          </div>
+
           <div className="rounded-lg border border-emerald-900/10 bg-white p-5">
             <h3 className="text-sm font-semibold uppercase tracking-wide text-emerald-700">
-              Contact
+              Dues &amp; account questions
             </h3>
+            <p className="mt-2 text-stone-700">
+              Assessments, payments, balances, and statements are handled by
+              the association&apos;s accounting office.
+            </p>
             <address className="mt-2 not-italic leading-relaxed text-stone-700">
               <span className="font-medium text-emerald-900">
                 {accountingContact.name}
