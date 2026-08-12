@@ -57,7 +57,34 @@ hand those off separately.
 ## Phase 2 — Resident accounts (portal foundation)
 - New Supabase project (separate account) for auth + Postgres + file storage.
 - Email magic-link login for residents (no SMS cost, no passwords to manage).
-- Basic resident directory / admin-added resident list.
+- Resident directory, editable by the board as residents change.
+
+### Source data (May 2026 resident list)
+
+Provided as an accounting-system export ("AliceCustomerList" sheet, 269
+residents). **The file itself is never committed — this repo is public.**
+Columns: Customer ID · property address · resident name · Telephone 1 ·
+Telephone 2 · e-mail · 2nd e-mail.
+
+Contact coverage, which constrains how residents can log in:
+
+| Have | Count | Share |
+|---|---|---|
+| An e-mail address | 196 / 269 | 73% |
+| A phone number | 226 / 269 | 84% |
+| Neither e-mail nor phone | 39 / 269 | 15% |
+
+Implications to settle before building auth:
+- Email magic-link alone reaches only 73% of residents. Adding SMS raises
+  reach to ~85% but costs money per message.
+- 39 residents have no contact method on file at all, so **some manual
+  board-run onboarding is unavoidable regardless of the login method.**
+- Cheapest path is likely email magic-link plus a board-driven push to
+  collect the missing addresses, rather than paying for SMS.
+
+Useful bonus: 261 of 269 property addresses match a street named in the
+restriction guide, so each resident's phase can be derived automatically
+rather than entered by hand. The 8 unmatched rows need a manual look.
 
 ## Phase 3 — Financials
 - Admin-only upload/posting of HOA financial documents or summaries.
