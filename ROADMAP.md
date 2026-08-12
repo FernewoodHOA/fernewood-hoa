@@ -34,8 +34,25 @@ hand those off separately.
 - [x] Point fernewood.org's DNS (in GoDaddy) at Vercel. `fernewood.org` and
       `www.fernewood.org` are both live. GoDaddy now used only for domain
       registration + email/service records (unchanged).
-- [ ] Cancel/downgrade the GoDaddy "Websites + Marketing" (Airo) subscription
-      now that the new site is confirmed live on the real domain.
+- [x] Reviewed the leftover GoDaddy "Websites + Marketing" subscriptions.
+      Nothing to cancel: both are on the **Free** tier ($0/mo), and both
+      detached from fernewood.org when DNS was repointed (they now serve
+      `fernewood.godaddysites.com` / `fernewood5.godaddysites.com`, each
+      showing only a placeholder page). Leaving them in place — deleting
+      is irreversible and saves nothing.
+
+## Action items — time-sensitive
+
+- **Rescue old InstantPage content before September 1, 2026.** The legacy
+  GoDaddy InstantPage site (separate product from the two free Websites +
+  Marketing subscriptions) still holds "Fernewood Magazine" content and
+  sunsets on that date. Board Members and Covenants have already been
+  rebuilt on the new site; Fernewood Magazine has not. Once InstantPage
+  shuts down, anything not exported is gone.
+- **Domain auto-renew is OFF.** fernewood.org is paid through
+  **February 21, 2034**, but will not renew automatically. Either turn
+  auto-renew on in GoDaddy, or make sure this expiry date is carried
+  forward in the handoff notes so a future board doesn't lose the domain.
 
 ## Phase 2 — Resident accounts (portal foundation)
 - New Supabase project (separate account) for auth + Postgres + file storage.
