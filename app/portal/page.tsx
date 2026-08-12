@@ -5,7 +5,7 @@ import { siteConfig } from "@/lib/site-config";
 export const metadata: Metadata = {
   title: `Resident Portal | ${siteConfig.shortName}`,
   description:
-    "The Fernewood resident portal — announcements, the resident directory, and a community board for Fernewood homeowners.",
+    "The Fernewood resident portal — announcements, the resident directory, a community board, and park pavilion reservations for Fernewood homeowners.",
 };
 
 const features = [
@@ -20,6 +20,10 @@ const features = [
   {
     title: "Community Board",
     body: "Ask questions, share photos, and discuss neighborhood topics privately.",
+  },
+  {
+    title: "Park Pavilion Reservations",
+    body: "Request the park pavilion for birthdays, practices, and gatherings — and see what's already booked.",
   },
 ];
 

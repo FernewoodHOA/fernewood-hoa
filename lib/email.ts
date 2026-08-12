@@ -11,17 +11,23 @@ export async function sendBoardEmail({
   subject,
   text,
   replyTo,
+  to: toOverride,
 }: {
   subject: string;
   text: string;
   replyTo?: string;
+  /** Recipients. Defaults to the board (BOARD_EMAIL_TO) when omitted. */
+  to?: string[];
 }): Promise<boolean> {
   const apiKey = process.env.RESEND_API_KEY;
   const from = process.env.BOARD_EMAIL_FROM;
-  const to = (process.env.BOARD_EMAIL_TO ?? "")
-    .split(",")
-    .map((address) => address.trim())
-    .filter(Boolean);
+  const to =
+    toOverride && toOverride.length > 0
+      ? toOverride
+      : (process.env.BOARD_EMAIL_TO ?? "")
+          .split(",")
+          .map((address) => address.trim())
+          .filter(Boolean);
 
   if (!apiKey || !from || to.length === 0) return false;
 

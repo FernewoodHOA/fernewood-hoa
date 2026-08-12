@@ -105,7 +105,14 @@ Built in stages so each one is usable before the next begins:
   resident roster and flagged `matched` / `unmatched`; an admin still
   approves every one.
 - **2b — Resident directory.** Searchable, board-editable as residents
-  change.
+  change. **Residents maintain their own entry:** once approved, each
+  resident can update their own contact details (phone, email, and whatever
+  else the board decides to show), so the directory stays current without
+  the board re-keying a spreadsheet. Worth deciding at build time: which
+  fields a resident may edit vs. which stay board-controlled (address and
+  phase should almost certainly be board-only, since they determine covenant
+  obligations), and whether a resident can hide their details from the
+  directory while still keeping portal access.
 - **2c — Announcements.** Board posts, residents read.
 - **2d — Financials. SHELVED (2026-08-12).** Board uploads documents,
   residents read. Pulled from the public website copy pending a board
@@ -165,7 +172,31 @@ rather than entered by hand. The 8 unmatched rows need a manual look.
 ## Phase 4 — Community features
 - Announcements board (board-posted, resident-visible).
 - Resident-submitted concerns/issues.
-- Park reservation calendar (request + approve or self-serve booking).
+
+### Park pavilion reservations
+
+Fernewood has a neighborhood park with a pavilion. Today residents claim it
+by posting in a Facebook group that the board doesn't actively manage, so
+there is no authoritative record of who has it when, and no way to catch a
+double-booking before two families show up on the same afternoon.
+
+Build: a calendar where approved residents **request** a reservation
+(birthday parties, sports practice, etc.) and a board member approves or
+declines it. Requesting rather than self-serve booking matches how the
+board wants to keep oversight, and mirrors the portal's existing
+apply → approve pattern.
+
+Worth settling before building:
+- Whether the calendar is visible to all residents (so people can see the
+  pavilion is taken before requesting) — almost certainly yes.
+- Booking limits: max hours per reservation, how far ahead residents may
+  book, whether one household can hold several future dates.
+- Whether the board needs to block out dates for association events.
+- What happens to a request nobody reviews — an auto-decline after N days,
+  or does it simply sit pending.
+- Cancellations: can a resident release a date they no longer need.
+
+Reuses the approval queue and notification email built in Phase 2a.
 
 ## Phase 5 — Admin tools & handoff
 - Simple admin dashboard so a non-technical board member can manage
