@@ -23,7 +23,7 @@ const features = [
   },
   {
     title: "Community Board",
-    body: "Ask questions, share photos, and raise concerns with the rest of the neighborhood.",
+    body: "Ask questions, share photos, and discuss neighborhood topics privately.",
   },
 ];
 
