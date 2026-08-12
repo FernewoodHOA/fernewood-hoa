@@ -35,7 +35,11 @@ export async function middleware(request: NextRequest) {
   } = await supabase.auth.getUser();
 
   const path = request.nextUrl.pathname;
-  const isPrivate = path.startsWith("/admin") || path.startsWith("/portal/home");
+  const isPrivate =
+    path.startsWith("/admin") ||
+    path.startsWith("/portal/home") ||
+    path.startsWith("/portal/directory") ||
+    path.startsWith("/portal/profile");
 
   if (isPrivate && !user) {
     const loginUrl = new URL("/portal/login", request.url);
@@ -59,5 +63,10 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/admin/:path*", "/portal/home/:path*"],
+  matcher: [
+    "/admin/:path*",
+    "/portal/home/:path*",
+    "/portal/directory/:path*",
+    "/portal/profile/:path*",
+  ],
 };

@@ -51,13 +51,36 @@ export default async function PortalHome() {
         </div>
       )}
 
+      <div className="grid gap-4 sm:grid-cols-2">
+        <Link
+          href="/portal/directory"
+          className="rounded-lg border border-emerald-900/10 bg-white p-6 transition-colors hover:border-emerald-700/40"
+        >
+          <h2 className="font-semibold text-emerald-950">Resident Directory</h2>
+          <p className="mt-1 text-sm text-stone-600">
+            Look up neighbors who have chosen to be listed.
+          </p>
+        </Link>
+
+        <Link
+          href="/portal/profile"
+          className="rounded-lg border border-emerald-900/10 bg-white p-6 transition-colors hover:border-emerald-700/40"
+        >
+          <h2 className="font-semibold text-emerald-950">My Listing</h2>
+          <p className="mt-1 text-sm text-stone-600">
+            {profile.in_directory
+              ? "You're listed in the directory. Edit what neighbors see."
+              : "You're not listed yet. Choose whether to appear."}
+          </p>
+        </Link>
+      </div>
+
       <div className="rounded-lg border border-emerald-900/10 bg-white p-6">
-        <h2 className="font-semibold text-emerald-950">
-          More coming soon
-        </h2>
+        <h2 className="font-semibold text-emerald-950">More coming soon</h2>
         <p className="mt-1 text-stone-600">
-          The resident directory, announcements, and the community board are
-          still being built. You&apos;ll see them here as they&apos;re added.
+          Announcements, the community board, and park pavilion reservations
+          are still being built. You&apos;ll see them here as they&apos;re
+          added.
         </p>
       </div>
     </div>

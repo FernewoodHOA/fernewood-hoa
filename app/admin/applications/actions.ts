@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { headers } from "next/headers";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getCurrentProfile } from "@/lib/supabase/server";
 import { sendBoardEmail } from "@/lib/email";
@@ -31,7 +32,7 @@ export async function approveApplication(
 
   const { data: application, error: loadError } = await supabase
     .from("applications")
-    .select("id, full_name, address, email, status, matched_resident_id")
+    .select("id, full_name, address, email, phone, status, matched_resident_id")
     .eq("id", id)
     .single();
 
@@ -78,6 +79,9 @@ export async function approveApplication(
     id: userId,
     full_name: application.full_name,
     address: application.address,
+    email: application.email,
+    // Their submitted phone seeds the profile; they can change or hide it.
+    phone: application.phone,
     resident_id: application.matched_resident_id,
     is_admin: isAdmin,
   });
@@ -104,15 +108,47 @@ export async function approveApplication(
 
   // Best-effort: tell them they're in. Approval already succeeded, so a
   // failed email must not roll it back.
+  //
+  // Include a working sign-in link rather than instructions — telling someone
+  // to "go to the login page and enter your email" lands them on a page that
+  // also offers "request access", which reads like they need to apply again.
+  const origin = (await headers()).get("origin") ?? "https://www.fernewood.org";
+  const { data: link } = await supabase.auth.admin.generateLink({
+    type: "magiclink",
+    email: application.email,
+    options: { redirectTo: `${origin}/portal/home` },
+  });
+
+  const signInLink = link?.properties?.hashed_token
+    ? `${origin}/auth/confirm?token_hash=${encodeURIComponent(link.properties.hashed_token)}&type=magiclink&next=%2Fportal%2Fhome`
+    : null;
+
   await sendBoardEmail({
     subject: "Your Fernewood resident portal access is approved",
     text: [
       `Hello ${application.full_name},`,
       "",
-      "Your request for access to the Fernewood resident portal has been approved.",
+      "Your request for access to the Fernewood resident portal has been",
+      "approved. Welcome!",
       "",
-      "To sign in, visit https://www.fernewood.org/portal/login and enter this",
-      "email address. You'll receive a sign-in link — no password required.",
+      ...(signInLink
+        ? [
+            "Click here to sign in now:",
+            "",
+            signInLink,
+            "",
+            "That link expires in one hour. After that — and every time you",
+            "sign in from now on — go to:",
+            "",
+            `  ${origin}/portal/login`,
+            "",
+            "Enter this email address and we'll send you a fresh link. There's",
+            "no password to remember.",
+          ]
+        : [
+            `To sign in, go to ${origin}/portal/login and enter this email`,
+            "address. We'll send you a sign-in link — no password required.",
+          ]),
       "",
       "— Fernewood Homeowners Association",
     ].join("\n"),

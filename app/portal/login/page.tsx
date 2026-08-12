@@ -35,8 +35,9 @@ export default async function LoginPage({
         Resident Sign In
       </h1>
       <p className="max-w-xl text-stone-600">
-        Enter your email and we&apos;ll send you a sign-in link. Accounts are
-        created once the board approves your access request.
+        Enter the email address your account was approved under. We&apos;ll
+        send you a link that signs you in — there&apos;s no password to
+        remember.
       </p>
 
       {errorMessage && (
@@ -50,15 +51,19 @@ export default async function LoginPage({
 
       <LoginForm next={next} />
 
-      <p className="text-sm text-stone-600">
-        Don&apos;t have access yet?{" "}
+      <p className="border-t border-emerald-900/10 pt-5 text-sm text-stone-600">
+        <span className="font-medium text-emerald-950">
+          Never requested access?
+        </span>{" "}
+        If the board hasn&apos;t approved an account for you yet, you&apos;ll
+        need to{" "}
         <Link
           href="/portal/apply"
-          className="font-medium text-emerald-800 hover:text-emerald-900"
+          className="font-medium text-emerald-800 underline underline-offset-2 hover:text-emerald-900"
         >
-          Request access
-        </Link>
-        .
+          request access
+        </Link>{" "}
+        first. If you&apos;ve already been approved, just use the form above.
       </p>
     </div>
   );
