@@ -5,9 +5,7 @@ import { siteConfig } from "@/lib/site-config";
 export default function Home() {
   return (
     <div className="flex flex-col">
-      {/* Hero is capped so the portal announcement below stays above the fold
-          on a typical laptop screen. */}
-      <section className="relative flex h-[52vh] max-h-[500px] min-h-[320px] items-end overflow-hidden">
+      <section className="relative flex h-[70vh] min-h-[420px] items-end overflow-hidden">
         <Image
           src="/hero-sign-closeup.jpg"
           alt="Fernewood neighborhood entrance sign"
