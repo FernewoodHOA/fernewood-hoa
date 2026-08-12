@@ -18,6 +18,4 @@ export const accountingContact = {
   lines: ["525 Weeks Street", "New Iberia, LA 70560"],
   office: "(337) 364-7221",
   officeHref: "tel:+13373647221",
-  fax: "(337) 364-7235",
-  email: "aoliver@chlcpa.com",
 };

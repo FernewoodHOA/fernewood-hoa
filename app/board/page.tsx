@@ -72,15 +72,6 @@ export default function BoardPage() {
                 >
                   {accountingContact.office}
                 </a>
-                <br />
-                Fax: {accountingContact.fax}
-                <br />
-                <a
-                  href={`mailto:${accountingContact.email}`}
-                  className="font-medium text-emerald-800 hover:text-emerald-900"
-                >
-                  {accountingContact.email}
-                </a>
               </span>
             </address>
           </div>
