@@ -45,9 +45,8 @@ export default function Home() {
             A private portal for Fernewood residents
           </h2>
           <p className="mt-2 max-w-xl text-stone-600">
-            Announcements, association financials, a resident directory, and a
-            community board — all in one place. Access is limited to
-            Fernewood homeowners.
+            Announcements, a resident directory, and a community board — all
+            in one place. Access is limited to Fernewood homeowners.
           </p>
           <Link
             href="/portal"

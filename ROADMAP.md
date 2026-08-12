@@ -107,7 +107,10 @@ Built in stages so each one is usable before the next begins:
 - **2b — Resident directory.** Searchable, board-editable as residents
   change.
 - **2c — Announcements.** Board posts, residents read.
-- **2d — Financials.** Board uploads documents, residents read.
+- **2d — Financials. SHELVED (2026-08-12).** Board uploads documents,
+  residents read. Pulled from the public website copy pending a board
+  discussion — do not build or re-advertise this until the board decides
+  what, if anything, should be published to residents.
 - **2e — Community feed.** Facebook-style: residents post questions,
   photos, and concerns, with comments.
 
@@ -153,9 +156,11 @@ Useful bonus: 261 of 269 property addresses match a street named in the
 restriction guide, so each resident's phase can be derived automatically
 rather than entered by hand. The 8 unmatched rows need a manual look.
 
-## Phase 3 — Financials
+## Phase 3 — Financials (shelved pending board discussion)
 - Admin-only upload/posting of HOA financial documents or summaries.
 - Resident-only viewing behind login.
+- Removed from the public website 2026-08-12 at Jared's request; needs board
+  agreement before it goes back on the site or gets built.
 
 ## Phase 4 — Community features
 - Announcements board (board-posted, resident-visible).
