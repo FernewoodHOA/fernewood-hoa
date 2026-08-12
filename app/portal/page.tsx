@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 const features = [
   {
     title: "Announcements",
-    body: "Notices from the board, in one place instead of scattered across flyers and word of mouth.",
+    body: "Notices from the Board.",
   },
   {
     title: "Resident Directory",

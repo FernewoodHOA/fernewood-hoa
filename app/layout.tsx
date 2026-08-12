@@ -18,7 +18,16 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={`${geistSans.variable} h-full antialiased`}>
-      <body className="flex min-h-full flex-col bg-stone-50 font-sans text-stone-900">
+      {/*
+        suppressHydrationWarning: browser extensions (Grammarly and similar)
+        add attributes to <body> before React hydrates, which otherwise logs a
+        hydration mismatch on every page. Scoped to this element only, so real
+        mismatches elsewhere still surface.
+      */}
+      <body
+        suppressHydrationWarning
+        className="flex min-h-full flex-col bg-stone-50 font-sans text-stone-900"
+      >
         <Header />
         <main className="flex-1">{children}</main>
         <Footer />
