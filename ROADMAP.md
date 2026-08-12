@@ -34,6 +34,11 @@ hand those off separately.
 - [x] Point fernewood.org's DNS (in GoDaddy) at Vercel. `fernewood.org` and
       `www.fernewood.org` are both live. GoDaddy now used only for domain
       registration + email/service records (unchanged).
+- [x] Moved the apex `A` record off Vercel's legacy IP (`76.76.21.21`) to
+      the current range (`216.198.79.1`) on 2026-08-12, clearing Vercel's
+      "DNS Change Recommended" warning. `www` was already on the current
+      CNAME (`…vercel-dns-017.com`). Verified afterwards: apex still 308s to
+      `www`, which serves 200.
 - [x] Reviewed the leftover GoDaddy "Websites + Marketing" subscriptions.
       Nothing to cancel: both are on the **Free** tier ($0/mo), and both
       detached from fernewood.org when DNS was repointed (they now serve
