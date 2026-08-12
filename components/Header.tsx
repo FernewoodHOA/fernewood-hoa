@@ -6,6 +6,7 @@ const links = [
   { href: "/covenants", label: "Covenants & Restrictions" },
   { href: "/board", label: "Board of Directors" },
   { href: "/portal", label: "Resident Portal" },
+  { href: "/contact", label: "Contact" },
 ];
 
 export default function Header() {

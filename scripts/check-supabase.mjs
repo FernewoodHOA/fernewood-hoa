@@ -37,7 +37,12 @@ const admin = createClient(url, serviceKey, {
 });
 
 console.log("\nTables (via service role):");
-for (const table of ["residents", "applications", "profiles"]) {
+for (const table of [
+  "residents",
+  "applications",
+  "profiles",
+  "board_inquiries",
+]) {
   const { count, error } = await admin
     .from(table)
     .select("*", { count: "exact", head: true });
@@ -46,20 +51,26 @@ for (const table of ["residents", "applications", "profiles"]) {
   );
 }
 
-// The anon key must NOT be able to read the roster. If this returns rows,
-// row level security is not doing its job.
+// Anonymous visitors must not be able to read any table holding personal
+// data. If any of these return rows, row level security is not doing its job.
 const anon = createClient(url, anonKey, { auth: { persistSession: false } });
-const { data: leaked, error: anonError } = await anon
-  .from("residents")
-  .select("id")
-  .limit(1);
 
-console.log("\nRLS check — anonymous read of residents:");
-if (anonError) {
-  console.log(`  blocked (${anonError.code ?? "error"}) — correct`);
-} else if (!leaked || leaked.length === 0) {
-  console.log("  returned no rows — correct");
-} else {
-  console.log("  *** LEAK: anonymous client could read the roster ***");
-  process.exit(1);
+console.log("\nRLS check — anonymous reads (all should be blocked/empty):");
+let leaked = false;
+for (const table of [
+  "residents",
+  "applications",
+  "profiles",
+  "board_inquiries",
+]) {
+  const { data, error } = await anon.from(table).select("*").limit(1);
+  if (error) {
+    console.log(`  ${table}: blocked (${error.code ?? "error"}) — correct`);
+  } else if (!data || data.length === 0) {
+    console.log(`  ${table}: no rows — correct`);
+  } else {
+    console.log(`  ${table}: *** LEAK — anonymous client read this table ***`);
+    leaked = true;
+  }
 }
+if (leaked) process.exit(1);
