@@ -62,6 +62,18 @@ households currently have no documented set of covenants. Worth confirming
 against the recorded filings before the directory or portal shows a phase
 for every resident.
 
+## Before the portal/contact form is announced
+
+- [ ] **Restore the full board recipient list.** `BOARD_EMAIL_TO` is
+      temporarily set to `jaredpolitz@gmail.com` only, so test messages don't
+      reach the other four members. Before launch it must go back to all
+      five board addresses — otherwise resident inquiries silently reach one
+      person. The full list is in `.env.local` history and in the board's
+      records; it is deliberately not written here (public repo).
+- [ ] Set every environment variable in Vercel as well. They currently exist
+      only on the local machine, so the contact form and portal do not work
+      on the live site yet.
+
 ## Action items — time-sensitive
 
 - **Rescue old InstantPage content before September 1, 2026.** The legacy
