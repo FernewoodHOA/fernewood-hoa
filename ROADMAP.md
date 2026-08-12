@@ -41,6 +41,27 @@ hand those off separately.
       showing only a placeholder page). Leaving them in place — deleting
       is irreversible and saves nothing.
 
+## Action items — board review needed
+
+**18 properties have no covenant phase.** When the May 2026 roster was
+imported, 251 of 269 addresses matched a phase in the restriction guide.
+These 18 did not, and the gaps appear to be in the guide itself rather than
+in the data — each address falls between documented ranges, or on a street
+the guide never mentions:
+
+| Addresses | Why it doesn't match |
+|---|---|
+| 100–107 Fernewood Drive (8 homes) | Fernewood Drive is not listed in **any** phase |
+| 200, 204, 205, 206, 207 Llansfair | Guide covers 100–112 and 602–607 only |
+| 204 and 217 Waterford | Guide covers 100–203, plus 202, 205–216, 219 |
+| 201 Waterside | Guide covers 100–111 and 402–604 |
+| 600, 601 Farmington | Guide covers 418–508 and 602–810 |
+
+This is a records question for the board, not a software bug: those
+households currently have no documented set of covenants. Worth confirming
+against the recorded filings before the directory or portal shows a phase
+for every resident.
+
 ## Action items — time-sensitive
 
 - **Rescue old InstantPage content before September 1, 2026.** The legacy
