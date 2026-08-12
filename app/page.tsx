@@ -5,7 +5,9 @@ import { siteConfig } from "@/lib/site-config";
 export default function Home() {
   return (
     <div className="flex flex-col">
-      <section className="relative flex h-[70vh] min-h-[420px] items-end overflow-hidden">
+      {/* Hero is capped so the portal announcement below stays above the fold
+          on a typical laptop screen. */}
+      <section className="relative flex h-[46vh] max-h-[440px] min-h-[300px] items-end overflow-hidden">
         <Image
           src="/hero-sign-closeup.jpg"
           alt="Fernewood neighborhood entrance sign"
@@ -24,7 +26,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="mx-auto flex w-full max-w-4xl flex-col items-start gap-6 px-6 py-16">
+      <section className="mx-auto flex w-full max-w-4xl flex-col items-start gap-5 px-6 py-10">
         <p className="max-w-xl text-lg text-stone-600">
           Welcome to the official website for the Fernewood community. Here
           you&apos;ll find neighborhood information and access to our
