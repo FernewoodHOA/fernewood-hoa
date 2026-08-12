@@ -24,6 +24,12 @@
 .DS_Store
 *.pem
 
+# resident/personal data — this repo is PUBLIC, never commit these
+*.xlsx
+*.xls
+*.csv
+/private/
+
 # debug
 npm-debug.log*
 yarn-debug.log*
