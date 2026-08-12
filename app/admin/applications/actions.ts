@@ -136,6 +136,13 @@ export async function rejectApplication(
   }
 
   const supabase = createAdminClient();
+
+  const { data: application } = await supabase
+    .from("applications")
+    .select("full_name, email")
+    .eq("id", id)
+    .single();
+
   const { error } = await supabase
     .from("applications")
     .update({
@@ -151,6 +158,34 @@ export async function rejectApplication(
     return { status: "error", message: "Could not update the application." };
   }
 
+  // Tell them, and tell them how to appeal. A silent decline leaves a
+  // resident with no idea whether their request was seen.
+  if (application?.email) {
+    await sendBoardEmail({
+      to: [application.email],
+      subject: "About your Fernewood resident portal request",
+      text: [
+        `Hello ${application.full_name},`,
+        "",
+        "Thank you for requesting access to the Fernewood resident portal.",
+        "The Board wasn't able to approve this request.",
+        ...(note ? ["", `Reason given: ${note}`] : []),
+        "",
+        "If you believe this was a mistake — for example if your name or",
+        "property address didn't match our records — please get in touch and",
+        "we'll be glad to sort it out:",
+        "",
+        "  Contact form: https://www.fernewood.org/contact",
+        "  Phone:        (337) 364-7221",
+        "",
+        "You're also welcome to submit a new request at",
+        "https://www.fernewood.org/portal/apply",
+        "",
+        "— Fernewood Homeowners Association",
+      ].join("\n"),
+    });
+  }
+
   revalidatePath("/admin/applications");
-  return { status: "ok", message: "Application declined." };
+  return { status: "ok", message: "Application declined and the resident notified." };
 }
