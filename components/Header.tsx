@@ -4,6 +4,7 @@ import { siteConfig } from "@/lib/site-config";
 const links = [
   { href: "/", label: "Home" },
   { href: "/covenants", label: "Covenants & Restrictions" },
+  { href: "/board", label: "Board of Directors" },
 ];
 
 export default function Header() {

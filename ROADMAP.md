@@ -58,6 +58,13 @@ hand those off separately.
 - Handoff documentation for whoever eventually takes over maintenance.
 
 ## Backlog / not yet scoped
-- Board Members page and "Fernewood Magazine" content that existed on the
-  old GoDaddy InstantPage site (sunsetting Sept 1, 2026) — worth deciding
-  whether to migrate before that shuts down.
+- "Fernewood Magazine" content that existed on the old GoDaddy InstantPage
+  site (sunsetting Sept 1, 2026) — worth deciding whether to migrate before
+  that shuts down.
+
+## Content maintenance notes
+- Board members are listed in `lib/board.ts` — update after each election.
+- The restriction guide (street → phase) lives in `lib/restriction-guide.ts`.
+- Covenant PDFs are NOT stored in this repo; they live in a public Google
+  Drive folder linked from `/covenants`. To add or replace a document,
+  update the Drive folder — no website change needed.
