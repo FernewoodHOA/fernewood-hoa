@@ -54,10 +54,39 @@ hand those off separately.
   auto-renew on in GoDaddy, or make sure this expiry date is carried
   forward in the handoff notes so a future board doesn't lose the domain.
 
-## Phase 2 — Resident accounts (portal foundation)
-- New Supabase project (separate account) for auth + Postgres + file storage.
-- Email magic-link login for residents (no SMS cost, no passwords to manage).
-- Resident directory, editable by the board as residents change.
+## Phase 2 — Resident portal
+
+New Supabase project (separate account) for auth + Postgres + file storage.
+Email magic-link login. Residents apply for access; an admin approves.
+
+Built in stages so each one is usable before the next begins:
+
+- **2a — Foundation (signup → approve → login).** Public portal
+  announcement page, resident application form, admin approval queue,
+  magic-link login, welcome page. Applications are auto-checked against the
+  resident roster and flagged `matched` / `unmatched`; an admin still
+  approves every one.
+- **2b — Resident directory.** Searchable, board-editable as residents
+  change.
+- **2c — Announcements.** Board posts, residents read.
+- **2d — Financials.** Board uploads documents, residents read.
+- **2e — Community feed.** Facebook-style: residents post questions,
+  photos, and concerns, with comments.
+
+### Community feed — decide before building 2e
+
+This is the largest piece and the only one that creates ongoing work:
+
+- **Moderation is a standing obligation, not a feature.** Someone must be
+  able to remove abusive or defamatory posts, and neighbor disputes are
+  exactly the content that shows up. Needs a delete/hide control and a
+  named person responsible — this conflicts most with the goal of handing
+  the site to a non-technical successor.
+- **Photo uploads consume storage.** Supabase's free tier includes 1 GB;
+  phone photos run 2–5 MB each, so images must be resized on upload or the
+  free tier is gone in a few hundred posts.
+- Consider whether posts should be deletable by their author, editable,
+  and whether comments need their own moderation.
 
 ### Source data (May 2026 resident list)
 

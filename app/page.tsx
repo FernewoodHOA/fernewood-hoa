@@ -36,6 +36,26 @@ export default function Home() {
         >
           View Covenants & Restrictions
         </Link>
+
+        <div className="mt-4 w-full rounded-lg border border-emerald-700/30 bg-emerald-50 p-6">
+          <p className="text-sm font-semibold uppercase tracking-widest text-emerald-700">
+            Coming soon
+          </p>
+          <h2 className="mt-2 text-xl font-bold tracking-tight text-emerald-950">
+            A private portal for Fernewood residents
+          </h2>
+          <p className="mt-2 max-w-xl text-stone-600">
+            Announcements, association financials, a resident directory, and a
+            community board — all in one place. Access is limited to
+            Fernewood homeowners.
+          </p>
+          <Link
+            href="/portal"
+            className="mt-4 inline-block font-medium text-emerald-800 hover:text-emerald-900"
+          >
+            Learn more and request access &rarr;
+          </Link>
+        </div>
       </section>
     </div>
   );
