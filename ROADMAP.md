@@ -31,10 +31,11 @@ hand those off separately.
       project.
 - [x] Create a new Vercel account, import the repo, deploy. Live at
       fernewood-hoa.vercel.app.
-- [ ] Point fernewood.org's DNS (in GoDaddy) at Vercel. Keep GoDaddy only for
-      domain registration.
+- [x] Point fernewood.org's DNS (in GoDaddy) at Vercel. `fernewood.org` and
+      `www.fernewood.org` are both live. GoDaddy now used only for domain
+      registration + email/service records (unchanged).
 - [ ] Cancel/downgrade the GoDaddy "Websites + Marketing" (Airo) subscription
-      once the new site is confirmed live on the real domain.
+      now that the new site is confirmed live on the real domain.
 
 ## Phase 2 — Resident accounts (portal foundation)
 - New Supabase project (separate account) for auth + Postgres + file storage.
