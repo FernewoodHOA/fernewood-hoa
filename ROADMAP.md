@@ -75,9 +75,12 @@ for every resident.
       five board addresses — otherwise resident inquiries silently reach one
       person. The full list is in `.env.local` history and in the board's
       records; it is deliberately not written here (public repo).
-- [ ] Set every environment variable in Vercel as well. They currently exist
-      only on the local machine, so the contact form and portal do not work
-      on the live site yet.
+- [ ] **Remove `EMAIL_TEST_RECIPIENT`** from `.env.local` and from Vercel.
+      While it is set, every outbound email — approvals, declines, contact
+      messages, and announcement blasts — is redirected to that one address
+      and prefixed `[TEST]`. Residents receive nothing. This must be cleared
+      before launch or the portal will look like it works while silently
+      reaching no one.
 
 ## Action items — time-sensitive
 

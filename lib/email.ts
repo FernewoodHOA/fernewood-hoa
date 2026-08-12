@@ -21,13 +21,24 @@ export async function sendBoardEmail({
 }): Promise<boolean> {
   const apiKey = process.env.RESEND_API_KEY;
   const from = process.env.BOARD_EMAIL_FROM;
-  const to =
+  let to =
     toOverride && toOverride.length > 0
       ? toOverride
       : (process.env.BOARD_EMAIL_TO ?? "")
           .split(",")
           .map((address) => address.trim())
           .filter(Boolean);
+
+  // Testing guard. While EMAIL_TEST_RECIPIENT is set, every outbound message
+  // is redirected there instead of reaching real residents — including
+  // announcement blasts, which otherwise address each resident directly and
+  // bypass BOARD_EMAIL_TO entirely. Unset it to go live.
+  const testRecipient = process.env.EMAIL_TEST_RECIPIENT?.trim();
+  let redirectedFrom: string[] | null = null;
+  if (testRecipient) {
+    redirectedFrom = to;
+    to = [testRecipient];
+  }
 
   if (!apiKey || !from || to.length === 0) return false;
 
@@ -41,8 +52,12 @@ export async function sendBoardEmail({
       body: JSON.stringify({
         from,
         to,
-        subject,
-        text,
+        subject: redirectedFrom ? `[TEST] ${subject}` : subject,
+        // Make the redirect obvious, and say who would really have got it —
+        // otherwise a test blast looks indistinguishable from the real thing.
+        text: redirectedFrom
+          ? `[Testing mode — in production this would have gone to: ${redirectedFrom.join(", ")}]\n\n${text}`
+          : text,
         ...(replyTo ? { reply_to: replyTo } : {}),
       }),
     });
