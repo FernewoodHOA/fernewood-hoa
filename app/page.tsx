@@ -7,7 +7,7 @@ export default function Home() {
     <div className="flex flex-col">
       <section className="relative flex h-[70vh] min-h-[420px] items-end overflow-hidden">
         <Image
-          src="/hero-sign-tall.jpg"
+          src="/hero-sign-closeup.jpg"
           alt="Fernewood neighborhood entrance sign"
           fill
           priority
