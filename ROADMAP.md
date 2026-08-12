@@ -16,25 +16,25 @@ hand those off separately.
 |---|---|---|---|
 | GoDaddy | Jared's existing account | Domain registration (fernewood.org) + DNS | Existing, predates this project |
 | Google Drive | Jared's existing account | Hosts the covenant/restriction PDFs linked from `/covenants` | Existing, predates this project |
-| GitHub | jaredpolitz@gmail.com | Source code repository | Pending creation |
-| Vercel | jaredpolitz@gmail.com (via GitHub) | Hosting/deployment | Pending creation |
+| GitHub | FernewoodHOA account | Source code repository: [FernewoodHOA/fernewood-hoa](https://github.com/FernewoodHOA/fernewood-hoa) | Created |
+| Vercel | jaredpolitz@gmail.com (via GitHub) | Hosting/deployment: fernewood-hoa.vercel.app | Created, live |
 | Supabase | TBD | Auth + database + file storage (Phase 2+) | Not yet created |
 
-## Phase 0 — Landing page + document access (done, local)
+## Phase 0 — Landing page + document access (done)
 - Next.js site scaffolded (`app/`, Tailwind, TypeScript).
 - Home page with Fernewood entrance-sign hero photo.
 - `/covenants` page linking to the public Google Drive folder holding the
   restrictive covenants, phase documents, and zoning filings.
-- Not yet deployed — currently only runs locally (`npm run dev`).
 
-## Phase 1 — Go live
-- Create a new GitHub account/repo (separate credentials) and push this
-  project.
-- Create a new Vercel account, import the repo, deploy.
-- Point fernewood.org's DNS (in GoDaddy) at Vercel. Keep GoDaddy only for
-  domain registration.
-- Cancel/downgrade the GoDaddy "Websites + Marketing" (Airo) subscription
-  once the new site is confirmed live, since it's no longer needed.
+## Phase 1 — Go live (in progress)
+- [x] Create a new GitHub account/repo (separate credentials) and push this
+      project.
+- [x] Create a new Vercel account, import the repo, deploy. Live at
+      fernewood-hoa.vercel.app.
+- [ ] Point fernewood.org's DNS (in GoDaddy) at Vercel. Keep GoDaddy only for
+      domain registration.
+- [ ] Cancel/downgrade the GoDaddy "Websites + Marketing" (Airo) subscription
+      once the new site is confirmed live on the real domain.
 
 ## Phase 2 — Resident accounts (portal foundation)
 - New Supabase project (separate account) for auth + Postgres + file storage.
