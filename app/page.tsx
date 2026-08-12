@@ -7,13 +7,13 @@ export default function Home() {
     <div className="flex flex-col">
       <section className="relative flex h-[70vh] min-h-[420px] items-end overflow-hidden">
         <Image
-          src="/hero-sign-wide.jpg"
+          src="/hero-sign-tall.jpg"
           alt="Fernewood neighborhood entrance sign"
           fill
           priority
-          className="object-cover"
+          className="object-cover object-[center_65%]"
         />
-        <div className="absolute inset-0 bg-emerald-950/50" />
+        <div className="absolute inset-0 bg-gradient-to-t from-emerald-950/80 via-emerald-950/25 to-emerald-950/10" />
         <div className="relative mx-auto flex w-full max-w-4xl flex-col items-start gap-3 px-6 pb-14 text-white">
           <p className="text-sm font-semibold uppercase tracking-widest text-emerald-100">
             {siteConfig.location}
