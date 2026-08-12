@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { siteConfig } from "@/lib/site-config";
 import { boardMembers, mailingAddress, accountingContact } from "@/lib/board";
 
@@ -42,7 +43,14 @@ export default function BoardPage() {
           </h2>
           <p className="mt-1 max-w-xl text-stone-600">
             All association inquiries are handled by the association&apos;s
-            accounting firm.
+            accounting firm. To send the Board a message directly,{" "}
+            <Link
+              href="/contact"
+              className="font-medium text-emerald-800 underline underline-offset-2 hover:text-emerald-900"
+            >
+              visit the Contact page
+            </Link>
+            . You can also reach us by phone or mail.
           </p>
         </div>
 
