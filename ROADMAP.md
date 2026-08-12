@@ -105,7 +105,13 @@ Built in stages so each one is usable before the next begins:
   resident roster and flagged `matched` / `unmatched`; an admin still
   approves every one.
 - **2b — Resident directory.** Searchable, board-editable as residents
-  change. **Residents maintain their own entry:** once approved, each
+  change. **Households can have more than one portal account** — spouses
+  each sign in with their own email, and both profiles link to the same
+  roster row (nothing in the schema prevents this; verified 2026-08-12).
+  The roster itself is household-shaped, though: one name field but two
+  email fields per property. So decide whether the directory lists
+  households ("The Politz family, 306 Englewood") or individuals, and how
+  it handles a property whose two accounts disagree about what to display. **Residents maintain their own entry:** once approved, each
   resident can update their own contact details (phone, email, and whatever
   else the board decides to show), so the directory stays current without
   the board re-keying a spreadsheet. Worth deciding at build time: which
