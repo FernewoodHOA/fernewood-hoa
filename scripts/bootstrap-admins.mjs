@@ -63,6 +63,8 @@ for (const email of emails) {
   const { error: profileError } = await supabase.from("profiles").upsert({
     id: userId,
     full_name: email.split("@")[0],
+    // Needed so board members receive emailed announcements like any resident.
+    email,
     is_admin: true,
   });
 

@@ -42,16 +42,32 @@ export default async function PortalHome() {
           <p className="mt-1 text-sm text-stone-700">
             You have administrator access.
           </p>
-          <Link
-            href="/admin/applications"
-            className="mt-3 inline-block font-medium text-emerald-800 hover:text-emerald-900"
-          >
-            Review portal access requests &rarr;
-          </Link>
+          <div className="mt-3 flex flex-wrap gap-x-6 gap-y-2">
+            <Link
+              href="/admin/applications"
+              className="font-medium text-emerald-800 hover:text-emerald-900"
+            >
+              Review access requests &rarr;
+            </Link>
+            <Link
+              href="/admin/announcements"
+              className="font-medium text-emerald-800 hover:text-emerald-900"
+            >
+              Post an announcement &rarr;
+            </Link>
+          </div>
         </div>
       )}
 
       <div className="grid gap-4 sm:grid-cols-2">
+        <Link
+          href="/portal/announcements"
+          className="rounded-lg border border-emerald-900/10 bg-white p-6 transition-colors hover:border-emerald-700/40"
+        >
+          <h2 className="font-semibold text-emerald-950">Announcements</h2>
+          <p className="mt-1 text-sm text-stone-600">Notices from the Board.</p>
+        </Link>
+
         <Link
           href="/portal/directory"
           className="rounded-lg border border-emerald-900/10 bg-white p-6 transition-colors hover:border-emerald-700/40"

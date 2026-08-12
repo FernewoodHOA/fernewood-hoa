@@ -39,7 +39,8 @@ export async function middleware(request: NextRequest) {
     path.startsWith("/admin") ||
     path.startsWith("/portal/home") ||
     path.startsWith("/portal/directory") ||
-    path.startsWith("/portal/profile");
+    path.startsWith("/portal/profile") ||
+    path.startsWith("/portal/announcements");
 
   if (isPrivate && !user) {
     const loginUrl = new URL("/portal/login", request.url);
@@ -68,5 +69,6 @@ export const config = {
     "/portal/home/:path*",
     "/portal/directory/:path*",
     "/portal/profile/:path*",
+    "/portal/announcements/:path*",
   ],
 };
