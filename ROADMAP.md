@@ -18,7 +18,7 @@ hand those off separately.
 | Google Drive | Jared's existing account | Hosts the covenant/restriction PDFs linked from `/covenants` | Existing, predates this project |
 | GitHub | FernewoodHOA account | Source code repository: [FernewoodHOA/fernewood-hoa](https://github.com/FernewoodHOA/fernewood-hoa) | Created |
 | Vercel | jaredpolitz@gmail.com (via GitHub) | Hosting/deployment: fernewood-hoa.vercel.app | Created, live |
-| Supabase | TBD | Auth + database + file storage (Phase 2+) | Not yet created |
+| Supabase | Fernewood HOA org (free tier) | Auth + database + file storage. Project: "Fernewood HOA Website" | Created; portal schema applied |
 
 ## Phase 0 — Landing page + document access (done)
 - Next.js site scaffolded (`app/`, Tailwind, TypeScript).
