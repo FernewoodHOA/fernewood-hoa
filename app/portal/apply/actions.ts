@@ -1,7 +1,9 @@
 "use server";
 
+import { headers } from "next/headers";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { normalizeAddress } from "@/lib/address";
+import { sendBoardEmail } from "@/lib/email";
 
 export type ApplyState = {
   status: "idle" | "success" | "error";
@@ -87,6 +89,31 @@ export async function submitApplication(
       message: "Something went wrong submitting your application.",
     };
   }
+
+  // Tell the board a request is waiting. Without this the queue is silent and
+  // requests sit until someone thinks to check it.
+  const origin = (await headers()).get("origin") ?? "https://www.fernewood.org";
+  await sendBoardEmail({
+    subject: `Portal access request: ${fullName}`,
+    text: [
+      "A resident has requested access to the Fernewood portal.",
+      "",
+      `Name:    ${fullName}`,
+      `Address: ${address}`,
+      `Email:   ${email}`,
+      phone ? `Phone:   ${phone}` : null,
+      "",
+      match
+        ? "This address MATCHES the resident roster."
+        : "This address does NOT match the resident roster — worth a closer look.",
+      note ? `\nTheir note: ${note}` : null,
+      "",
+      `Review it here: ${origin}/admin/applications`,
+    ]
+      .filter(Boolean)
+      .join("\n"),
+    replyTo: email,
+  });
 
   return {
     status: "success",

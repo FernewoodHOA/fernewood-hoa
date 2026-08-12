@@ -7,7 +7,7 @@ export default function Home() {
     <div className="flex flex-col">
       {/* Hero is capped so the portal announcement below stays above the fold
           on a typical laptop screen. */}
-      <section className="relative flex h-[46vh] max-h-[440px] min-h-[300px] items-end overflow-hidden">
+      <section className="relative flex h-[52vh] max-h-[500px] min-h-[320px] items-end overflow-hidden">
         <Image
           src="/hero-sign-closeup.jpg"
           alt="Fernewood neighborhood entrance sign"
