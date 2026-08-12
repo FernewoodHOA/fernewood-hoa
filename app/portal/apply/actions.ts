@@ -46,6 +46,25 @@ export async function submitApplication(
     };
   }
 
+  // Already approved? Send them to sign in instead of queuing a duplicate.
+  // The unique index only guards *pending* rows, so without this an approved
+  // resident who forgets they have access creates work for the board.
+  const { data: existing } = await supabase
+    .from("applications")
+    .select("id")
+    .ilike("email", email)
+    .eq("status", "approved")
+    .limit(1);
+
+  if (existing && existing.length > 0) {
+    return {
+      status: "error",
+      message:
+        "That email already has portal access. Head to the sign-in page and " +
+        "we'll email you a link — no need to apply again.",
+    };
+  }
+
   // Match against the roster so the board sees a verification signal.
   // Done here, server-side, so the browser can't forge the match.
   const { data: residents, error: rosterError } = await supabase
