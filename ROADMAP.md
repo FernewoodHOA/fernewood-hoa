@@ -5,6 +5,21 @@ storage once the portal starts. All accounts (Vercel, Supabase, GitHub) are
 new and separate from any of Jared's other projects, so the site can be
 handed off cleanly.
 
+## Accounts & Access
+
+Record of every account tied to this site, for future board handoff. Update
+this table as each account is created — do not record passwords here; this
+file lives in the repo. Store actual credentials in a password manager and
+hand those off separately.
+
+| Service | Login / Email | Purpose | Status |
+|---|---|---|---|
+| GoDaddy | Jared's existing account | Domain registration (fernewood.org) + DNS | Existing, predates this project |
+| Google Drive | Jared's existing account | Hosts the covenant/restriction PDFs linked from `/covenants` | Existing, predates this project |
+| GitHub | jaredpolitz@gmail.com | Source code repository | Pending creation |
+| Vercel | jaredpolitz@gmail.com (via GitHub) | Hosting/deployment | Pending creation |
+| Supabase | TBD | Auth + database + file storage (Phase 2+) | Not yet created |
+
 ## Phase 0 — Landing page + document access (done, local)
 - Next.js site scaffolded (`app/`, Tailwind, TypeScript).
 - Home page with Fernewood entrance-sign hero photo.
