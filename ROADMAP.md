@@ -130,6 +130,39 @@ Built in stages so each one is usable before the next begins:
 - **2e — Community feed.** Facebook-style: residents post questions,
   photos, and concerns, with comments.
 
+### Photo uploads — scoped, not yet built
+
+Decision (2026-08-12): **photos only.** No video, no general file uploads,
+until the Board discusses it based on resident feedback. Video is the item
+that would force a paid plan.
+
+**Storage math.** Supabase's free tier gives 1 GB of storage and 2 GB of
+monthly egress. Whether that lasts years or months depends entirely on
+whether uploads are resized:
+
+| Approach | Size each | Photos before 1 GB is full |
+|---|---|---|
+| Store phone photos as-is | 2–5 MB | ~250 — gone within a year |
+| Resize to 1600px, JPEG q80 | 200–400 KB | ~3,300 — years of headroom |
+
+So server-side resizing is not an optimisation, it's the thing that keeps
+this free. Budget ~$25/mo for Supabase Pro only if video is later allowed.
+
+**Must be handled when building:**
+
+- **Strip EXIF metadata.** Phone photos embed GPS coordinates. A resident
+  posting a picture taken at home would publish their exact address to every
+  other resident — including anyone later approved. Non-obvious and the most
+  important item here.
+- **Accept HEIC.** iPhones shoot HEIC by default and browsers can't display
+  it, so uploads must be converted to JPEG or iPhone users hit silent
+  failures.
+- Cap upload size (~10 MB before processing) and photos per post (~4).
+- Keep the storage bucket **private**, serve through signed URLs. A public
+  bucket means neighbourhood photos are indexable by search engines.
+- Delete the stored files when a post is deleted, or storage fills with
+  orphans nobody can see.
+
 ### Community feed — decide before building 2e
 
 This is the largest piece and the only one that creates ongoing work:
