@@ -79,7 +79,7 @@ export default async function AdminHome() {
     },
     {
       href: "/admin/reservations",
-      title: "Pavilion Requests",
+      title: "Park / Pavilion Requests",
       body:
         pavilion && pavilion > 0
           ? `${pavilion} waiting for review`

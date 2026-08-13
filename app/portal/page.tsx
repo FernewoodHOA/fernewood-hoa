@@ -22,7 +22,7 @@ const features = [
     body: "Ask questions, share photos, and discuss neighborhood topics privately.",
   },
   {
-    title: "Park Pavilion Reservations",
+    title: "Park / Pavilion Reservations",
     body: "Request the park pavilion for birthdays, practices, and gatherings — and see what's already booked.",
   },
 ];

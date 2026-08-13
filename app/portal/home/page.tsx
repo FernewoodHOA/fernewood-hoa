@@ -43,7 +43,7 @@ export default async function PortalHome() {
             You have administrator access.
           </p>
           <p className="mt-1 text-sm text-stone-700">
-            Access requests, announcements, pavilion requests, and contact
+            Access requests, announcements, park & pavilion requests, and contact
             messages are all in one place.
           </p>
           <Link
@@ -88,7 +88,7 @@ export default async function PortalHome() {
           href="/portal/pavilion"
           className="rounded-lg border border-emerald-900/10 bg-white p-6 transition-colors hover:border-emerald-700/40"
         >
-          <h2 className="font-semibold text-emerald-950">Park Pavilion</h2>
+          <h2 className="font-semibold text-emerald-950">Park / Pavilion Reservations</h2>
           <p className="mt-1 text-sm text-stone-600">
             See what&apos;s booked and request it for your own gathering.
           </p>

@@ -6,7 +6,7 @@ import { formatDate, formatTime, todayIso } from "@/lib/reservations";
 import DecisionButtons from "./DecisionButtons";
 
 export const metadata: Metadata = {
-  title: `Pavilion Requests | ${siteConfig.shortName}`,
+  title: `Park / Pavilion Requests | ${siteConfig.shortName}`,
 };
 
 export const dynamic = "force-dynamic";
@@ -33,7 +33,7 @@ export default async function AdminReservationsPage() {
     <div className="mx-auto flex max-w-4xl flex-col gap-8 px-6 py-14">
       <div>
         <h1 className="text-3xl font-bold tracking-tight text-emerald-950">
-          Pavilion Requests
+          Park / Pavilion Requests
         </h1>
         <p className="mt-2 max-w-2xl text-stone-600">
           Approving a request puts it on the resident calendar and emails the

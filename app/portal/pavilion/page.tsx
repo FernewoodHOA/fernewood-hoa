@@ -8,7 +8,7 @@ import PavilionClient from "./PavilionClient";
 import CancelButton from "./CancelButton";
 
 export const metadata: Metadata = {
-  title: `Park Pavilion | ${siteConfig.shortName}`,
+  title: `Park / Pavilion Reservations | ${siteConfig.shortName}`,
 };
 
 export const dynamic = "force-dynamic";
@@ -43,7 +43,7 @@ export default async function PavilionPage() {
     <div className="mx-auto flex max-w-3xl flex-col gap-8 px-6 py-14">
       <div>
         <h1 className="text-3xl font-bold tracking-tight text-emerald-950">
-          Park Pavilion
+          Park / Pavilion Reservations
         </h1>
         <p className="mt-2 max-w-xl text-stone-600">
           See what&apos;s booked and request the pavilion for your own
