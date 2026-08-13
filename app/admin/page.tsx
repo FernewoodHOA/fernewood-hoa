@@ -17,18 +17,26 @@ export default async function AdminHome() {
 
   const supabase = await createServerSupabase();
 
-  const [{ count: pending }, { count: announcements }, { count: inquiries }] =
-    await Promise.all([
-      supabase
-        .from("applications")
-        .select("*", { count: "exact", head: true })
-        .eq("status", "pending"),
-      supabase.from("announcements").select("*", { count: "exact", head: true }),
-      supabase
-        .from("board_inquiries")
-        .select("*", { count: "exact", head: true })
-        .eq("handled", false),
-    ]);
+  const [
+    { count: pending },
+    { count: announcements },
+    { count: inquiries },
+    { count: pavilion },
+  ] = await Promise.all([
+    supabase
+      .from("applications")
+      .select("*", { count: "exact", head: true })
+      .eq("status", "pending"),
+    supabase.from("announcements").select("*", { count: "exact", head: true }),
+    supabase
+      .from("board_inquiries")
+      .select("*", { count: "exact", head: true })
+      .eq("handled", false),
+    supabase
+      .from("reservations")
+      .select("*", { count: "exact", head: true })
+      .eq("status", "pending"),
+  ]);
 
   const tools = [
     {
@@ -54,6 +62,15 @@ export default async function AdminHome() {
           ? `${inquiries} unhandled`
           : "Nothing unhandled",
       urgent: Boolean(inquiries && inquiries > 0),
+    },
+    {
+      href: "/admin/reservations",
+      title: "Pavilion Requests",
+      body:
+        pavilion && pavilion > 0
+          ? `${pavilion} waiting for review`
+          : "No requests waiting",
+      urgent: Boolean(pavilion && pavilion > 0),
     },
   ];
 
