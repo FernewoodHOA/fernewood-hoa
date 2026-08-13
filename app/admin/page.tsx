@@ -40,7 +40,7 @@ export default async function AdminHome() {
     supabase
       .from("board_tasks")
       .select("*", { count: "exact", head: true })
-      .lt("status", 5), // anything not Resolved
+      .neq("status", 5), // anything not Resolved (5 is the only closed state)
   ]);
 
   const tools = [

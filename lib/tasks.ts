@@ -8,6 +8,7 @@
 export const TASK_STATUSES = [
   {
     value: 1,
+    sort: 1,
     label: "Needs board action",
     short: "Board",
     help: "The board owes the next step — a letter, a quote, a visit.",
@@ -17,6 +18,7 @@ export const TASK_STATUSES = [
   },
   {
     value: 2,
+    sort: 2,
     label: "Waiting on homeowner",
     short: "Homeowner",
     help: "The resident has to act before this can move.",
@@ -26,6 +28,7 @@ export const TASK_STATUSES = [
   },
   {
     value: 3,
+    sort: 3,
     label: "Waiting on vendor / attorney",
     short: "Vendor",
     help: "Waiting on someone outside the association.",
@@ -34,7 +37,18 @@ export const TASK_STATUSES = [
     open: true,
   },
   {
+    value: 6,
+    sort: 4,
+    label: "Invoice to pay",
+    short: "Invoice",
+    help: "Work is done; the association owes payment. Treasurer's queue.",
+    tone: "bg-orange-100 text-orange-900 border-orange-300",
+    dot: "bg-orange-500",
+    open: true,
+  },
+  {
     value: 4,
+    sort: 5,
     label: "Escalated — legal",
     short: "Escalated",
     help: "Formal enforcement is underway.",
@@ -44,6 +58,7 @@ export const TASK_STATUSES = [
   },
   {
     value: 5,
+    sort: 6,
     label: "Resolved",
     short: "Resolved",
     help: "Closed. No further action needed.",
@@ -53,10 +68,22 @@ export const TASK_STATUSES = [
   },
 ] as const;
 
+/** The one closed state. Everything else counts as open. */
+export const RESOLVED = 5;
+
 export type TaskStatus = (typeof TASK_STATUSES)[number]["value"];
 
 export function statusInfo(value: number) {
   return TASK_STATUSES.find((s) => s.value === value) ?? TASK_STATUSES[0];
+}
+
+/**
+ * Sort key for display. Status numbers are stored values, not an ordering —
+ * "Invoice to pay" was added later as 6 but belongs mid-list, so sort by this
+ * rather than by the raw number.
+ */
+export function sortKey(value: number) {
+  return statusInfo(value).sort;
 }
 
 export function isOpen(value: number) {

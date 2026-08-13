@@ -20,7 +20,8 @@ create table if not exists public.board_tasks (
   created_at   timestamptz not null default now(),
   updated_at   timestamptz not null default now(),
 
-  constraint board_tasks_status_range check (status between 1 and 5)
+  -- 6 = invoice to pay, added after the initial five (see lib/tasks.ts).
+  constraint board_tasks_status_range check (status between 1 and 6)
 );
 
 create index if not exists board_tasks_status_idx

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { siteConfig } from "@/lib/site-config";
 import { createServerSupabase } from "@/lib/supabase/server";
-import { TASK_STATUSES, statusInfo, isOpen, daysSince } from "@/lib/tasks";
+import { TASK_STATUSES, isOpen, daysSince, sortKey } from "@/lib/tasks";
 import TaskRow from "./TaskRow";
 import NewTaskForm from "./NewTaskForm";
 
@@ -21,7 +21,6 @@ export default async function TasksPage() {
       .select(
         "id, address, homeowner, issue, status, todo, notes, opened_at, closed_at, updated_at"
       )
-      .order("status")
       .order("opened_at"),
     supabase
       .from("board_task_events")
@@ -29,7 +28,12 @@ export default async function TasksPage() {
       .order("created_at"),
   ]);
 
-  const all = tasks ?? [];
+  // Sorted by workflow position, not by the raw status number — see sortKey.
+  const all = [...(tasks ?? [])].sort(
+    (a, b) =>
+      sortKey(a.status) - sortKey(b.status) ||
+      new Date(a.opened_at).getTime() - new Date(b.opened_at).getTime()
+  );
   const open = all.filter((t) => isOpen(t.status));
   const closed = all.filter((t) => !isOpen(t.status));
 
