@@ -22,7 +22,13 @@ function SubmitButton() {
   );
 }
 
-export default function RequestForm({ today }: { today: string }) {
+export default function RequestForm({
+  today,
+  prefillDate,
+}: {
+  today: string;
+  prefillDate?: string;
+}) {
   const [state, formAction] = useActionState(requestReservation, initial);
 
   if (state.status === "ok") {
@@ -55,11 +61,15 @@ export default function RequestForm({ today }: { today: string }) {
           Date
         </label>
         <input
+          // Remounts when a different day is picked on the calendar, so the
+          // new date actually replaces what's in the field.
+          key={prefillDate ?? "empty"}
           id="event_date"
           name="event_date"
           type="date"
           required
           min={today}
+          defaultValue={prefillDate ?? ""}
           className={field}
         />
       </div>

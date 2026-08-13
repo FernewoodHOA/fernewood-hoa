@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import { siteConfig } from "@/lib/site-config";
 import { createServerSupabase, getCurrentProfile } from "@/lib/supabase/server";
 import { formatDate, formatTime, todayIso } from "@/lib/reservations";
-import RequestForm from "./RequestForm";
+import PavilionClient from "./PavilionClient";
 import CancelButton from "./CancelButton";
 
 export const metadata: Metadata = {
@@ -20,18 +20,24 @@ export default async function PavilionPage() {
   const today = todayIso();
   const supabase = await createServerSupabase();
 
-  const { data: upcoming } = await supabase
+  // Pull a window around today so the calendar can page back a month or two
+  // without another round trip.
+  const windowStart = `${Number(today.slice(0, 4)) - 1}-01-01`;
+
+  const { data: all } = await supabase
     .from("reservations")
     .select(
       "id, profile_id, requester_name, event_date, starts_at, ends_at, purpose, status"
     )
-    .gte("event_date", today)
+    .gte("event_date", windowStart)
     .in("status", ["approved", "pending"])
     .order("event_date")
     .order("starts_at");
 
-  const approved = (upcoming ?? []).filter((r) => r.status === "approved");
-  const mine = (upcoming ?? []).filter((r) => r.profile_id === profile.id);
+  const approved = (all ?? []).filter((r) => r.status === "approved");
+  const mine = (all ?? []).filter(
+    (r) => r.profile_id === profile.id && r.event_date >= today
+  );
 
   return (
     <div className="mx-auto flex max-w-3xl flex-col gap-8 px-6 py-14">
@@ -49,30 +55,9 @@ export default async function PavilionPage() {
         <h2 className="text-xl font-bold tracking-tight text-emerald-950">
           What&apos;s booked
         </h2>
-
-        {approved.length === 0 ? (
-          <p className="text-stone-600">
-            Nothing booked yet — the pavilion is free.
-          </p>
-        ) : (
-          <ul className="flex flex-col gap-3">
-            {approved.map((r) => (
-              <li
-                key={r.id}
-                className="rounded-lg border border-emerald-900/10 bg-white p-4"
-              >
-                <p className="font-medium text-emerald-950">
-                  {formatDate(r.event_date)}
-                </p>
-                <p className="text-sm text-stone-700">
-                  {formatTime(r.starts_at)} – {formatTime(r.ends_at)} &middot;{" "}
-                  {r.requester_name}
-                </p>
-                <p className="text-sm text-stone-600">{r.purpose}</p>
-              </li>
-            ))}
-          </ul>
-        )}
+        <p className="text-sm text-stone-600">
+          Tap any day to see the hours laid out and spot a free window.
+        </p>
       </section>
 
       {mine.length > 0 && (
@@ -111,7 +96,17 @@ export default async function PavilionPage() {
         </section>
       )}
 
-      <RequestForm today={today} />
+      <PavilionClient
+        today={today}
+        bookings={approved.map((r) => ({
+          id: r.id,
+          event_date: r.event_date,
+          starts_at: r.starts_at,
+          ends_at: r.ends_at,
+          requester_name: r.requester_name,
+          purpose: r.purpose,
+        }))}
+      />
 
       <Link
         href="/portal/home"
