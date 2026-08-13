@@ -42,20 +42,16 @@ export default async function PortalHome() {
           <p className="mt-1 text-sm text-stone-700">
             You have administrator access.
           </p>
-          <div className="mt-3 flex flex-wrap gap-x-6 gap-y-2">
-            <Link
-              href="/admin/applications"
-              className="font-medium text-emerald-800 hover:text-emerald-900"
-            >
-              Review access requests &rarr;
-            </Link>
-            <Link
-              href="/admin/announcements"
-              className="font-medium text-emerald-800 hover:text-emerald-900"
-            >
-              Post an announcement &rarr;
-            </Link>
-          </div>
+          <p className="mt-1 text-sm text-stone-700">
+            Access requests, announcements, pavilion requests, and contact
+            messages are all in one place.
+          </p>
+          <Link
+            href="/admin"
+            className="mt-3 inline-block rounded-full bg-emerald-800 px-5 py-2 text-sm font-semibold text-white transition-colors hover:bg-emerald-900"
+          >
+            Open Board Tools
+          </Link>
         </div>
       )}
 
@@ -111,14 +107,6 @@ export default async function PortalHome() {
         </Link>
       </div>
 
-      <div className="rounded-lg border border-emerald-900/10 bg-white p-6">
-        <h2 className="font-semibold text-emerald-950">More coming soon</h2>
-        <p className="mt-1 text-stone-600">
-          Announcements, the community board, and park pavilion reservations
-          are still being built. You&apos;ll see them here as they&apos;re
-          added.
-        </p>
-      </div>
     </div>
   );
 }

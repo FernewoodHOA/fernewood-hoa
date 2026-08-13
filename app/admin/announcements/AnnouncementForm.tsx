@@ -71,6 +71,23 @@ export default function AnnouncementForm({
         />
       </div>
 
+      <div className="flex flex-col gap-1">
+        <label htmlFor="photos" className="text-sm font-medium text-emerald-950">
+          Photos <span className="font-normal text-stone-500">(optional)</span>
+        </label>
+        <input
+          id="photos"
+          name="photos"
+          type="file"
+          accept="image/*"
+          multiple
+          className="text-sm text-stone-700 file:mr-3 file:rounded-full file:border-0 file:bg-emerald-50 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-emerald-800 hover:file:bg-emerald-100"
+        />
+        <p className="text-xs text-stone-500">
+          Up to 4. Resized automatically, with location data removed.
+        </p>
+      </div>
+
       <label className="flex items-start gap-2 text-sm text-stone-700">
         <input type="checkbox" name="pinned" className="mt-0.5" />
         <span>

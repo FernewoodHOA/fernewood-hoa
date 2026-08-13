@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getCurrentProfile } from "@/lib/supabase/server";
 import { sendBoardEmail } from "@/lib/email";
+import { processAndStorePhotos, deletePhotos } from "@/lib/photos";
 
 export type AnnouncementState = {
   status: "idle" | "ok" | "error";
@@ -27,6 +28,12 @@ export async function postAnnouncement(
   if (!title) return { status: "error", message: "Please give it a title." };
   if (!body) return { status: "error", message: "Please write the announcement." };
 
+  const files = formData
+    .getAll("photos")
+    .filter((f): f is File => f instanceof File);
+  const photos = await processAndStorePhotos(files, `announcements/${author.id}`);
+  if (!photos.ok) return { status: "error", message: photos.message };
+
   const supabase = createAdminClient();
 
   const { data: created, error } = await supabase
@@ -37,11 +44,13 @@ export async function postAnnouncement(
       pinned,
       author_id: author.id,
       author_name: author.full_name,
+      photo_paths: photos.paths,
     })
     .select("id")
     .single();
 
   if (error || !created) {
+    await deletePhotos(photos.paths);
     return { status: "error", message: "Couldn't save the announcement." };
   }
 
@@ -120,6 +129,18 @@ export async function deleteAnnouncement(
 
   const id = String(formData.get("id") ?? "");
   const supabase = createAdminClient();
+
+  // Free the storage too, or deleted announcements leave orphaned photos
+  // that nobody can see but still count against the 1 GB allowance.
+  const { data: existing } = await supabase
+    .from("announcements")
+    .select("photo_paths")
+    .eq("id", id)
+    .single();
+  if (existing?.photo_paths?.length) {
+    await deletePhotos(existing.photo_paths);
+  }
+
   const { error } = await supabase.from("announcements").delete().eq("id", id);
 
   if (error) {

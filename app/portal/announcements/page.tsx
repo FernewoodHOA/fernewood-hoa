@@ -3,6 +3,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { siteConfig } from "@/lib/site-config";
 import { createServerSupabase, getCurrentProfile } from "@/lib/supabase/server";
+import { signPhotoUrls } from "@/lib/photos";
 
 export const metadata: Metadata = {
   title: `Announcements | ${siteConfig.shortName}`,
@@ -17,9 +18,13 @@ export default async function AnnouncementsPage() {
   const supabase = await createServerSupabase();
   const { data: announcements } = await supabase
     .from("announcements")
-    .select("id, title, body, pinned, author_name, created_at")
+    .select("id, title, body, pinned, author_name, photo_paths, created_at")
     .order("pinned", { ascending: false })
     .order("created_at", { ascending: false });
+
+  const allPaths = (announcements ?? []).flatMap((a) => a.photo_paths ?? []);
+  const signed = await signPhotoUrls(allPaths);
+  const urlByPath = new Map(allPaths.map((path, i) => [path, signed[i]]));
 
   return (
     <div className="mx-auto flex max-w-3xl flex-col gap-6 px-6 py-14">
@@ -70,6 +75,40 @@ export default async function AnnouncementsPage() {
               })}
             </p>
             <p className="mt-3 whitespace-pre-wrap text-stone-700">{a.body}</p>
+
+            {(a.photo_paths ?? []).length > 0 && (
+              <div
+                className={
+                  (a.photo_paths ?? []).length === 1
+                    ? "mt-4"
+                    : "mt-4 grid grid-cols-2 gap-2"
+                }
+              >
+                {(a.photo_paths ?? []).map((path: string) => {
+                  const url = urlByPath.get(path);
+                  if (!url) return null;
+                  return (
+                    <a
+                      key={path}
+                      href={url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="block overflow-hidden rounded-md border border-emerald-900/10"
+                    >
+                      {/* Signed URLs expire; Next's optimizer would cache one
+                          that later 403s, so use a plain img. */}
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={url}
+                        alt={`Photo attached to "${a.title}"`}
+                        loading="lazy"
+                        className="h-full w-full object-cover"
+                      />
+                    </a>
+                  );
+                })}
+              </div>
+            )}
           </li>
         ))}
       </ul>
