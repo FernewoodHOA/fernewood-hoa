@@ -19,6 +19,21 @@ hand those off separately.
 | GitHub | FernewoodHOA account | Source code repository: [FernewoodHOA/fernewood-hoa](https://github.com/FernewoodHOA/fernewood-hoa) | Created |
 | Vercel | jaredpolitz@gmail.com (via GitHub) | Hosting/deployment: fernewood-hoa.vercel.app | Created, live |
 | Supabase | Fernewood HOA org (free tier) | Auth + database + file storage. Project: "Fernewood HOA Website" | Created; portal schema applied |
+| Resend | jaredpolitz@gmail.com | Email delivery for the site (fernewood.org verified via DNS at GoDaddy) | Created, live |
+
+### Portal roles
+
+Three levels, set per profile in the database — not by environment variable:
+
+| Role | Who | Can |
+|---|---|---|
+| Admin (`is_admin`) | the five board members | everything |
+| Read-only (`is_viewer`) | Alice Oliver, accounting office | see board tools; no changes. Posts on the community board like any resident |
+| Resident | everyone else approved | resident portal only |
+
+`ADMIN_EMAILS` grants **full** admin and is not an email list. Read-only
+people must be left out of it, or they'll be silently upgraded the next time
+they're approved or the bootstrap script runs.
 
 ## Phase 0 — Landing page + document access (done)
 - Next.js site scaffolded (`app/`, Tailwind, TypeScript).
