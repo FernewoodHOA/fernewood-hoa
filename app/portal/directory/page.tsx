@@ -60,6 +60,13 @@ export default async function DirectoryPage() {
       )}
 
       <DirectorySearch entries={entries ?? []} />
+
+      <Link
+        href="/portal/home"
+        className="text-sm font-medium text-emerald-800 hover:text-emerald-900"
+      >
+        &larr; Back to the portal
+      </Link>
     </div>
   );
 }

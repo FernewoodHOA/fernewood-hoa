@@ -3,6 +3,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { siteConfig } from "@/lib/site-config";
 import { createServerSupabase, getCurrentProfile } from "@/lib/supabase/server";
+import { signPhotoUrls } from "@/lib/photos";
 import PostComposer from "./PostComposer";
 import ReplyForm from "./ReplyForm";
 import RemoveButton from "./RemoveButton";
@@ -31,7 +32,9 @@ export default async function CommunityBoardPage() {
   const [{ data: posts }, { data: replies }] = await Promise.all([
     supabase
       .from("posts")
-      .select("id, profile_id, author_name, body, removed_at, created_at")
+      .select(
+        "id, profile_id, author_name, body, photo_paths, removed_at, created_at"
+      )
       .order("created_at", { ascending: false })
       .limit(100),
     supabase
@@ -43,6 +46,12 @@ export default async function CommunityBoardPage() {
   // Removed items stay in the database as a moderation record but are hidden
   // from everyone here, including the author.
   const visiblePosts = (posts ?? []).filter((p) => !p.removed_at);
+
+  // The bucket is private, so every image needs a short-lived signed URL.
+  // Sign them all in one call rather than one round trip per photo.
+  const allPaths = visiblePosts.flatMap((p) => p.photo_paths ?? []);
+  const signed = await signPhotoUrls(allPaths);
+  const urlByPath = new Map(allPaths.map((path, i) => [path, signed[i]]));
   const repliesByPost = new Map<string, typeof replies>();
   for (const reply of replies ?? []) {
     if (reply.removed_at) continue;
@@ -97,9 +106,45 @@ export default async function CommunityBoardPage() {
                 )}
               </div>
 
-              <p className="mt-3 whitespace-pre-wrap text-stone-800">
-                {post.body}
-              </p>
+              {post.body && (
+                <p className="mt-3 whitespace-pre-wrap text-stone-800">
+                  {post.body}
+                </p>
+              )}
+
+              {(post.photo_paths ?? []).length > 0 && (
+                <div
+                  className={
+                    (post.photo_paths ?? []).length === 1
+                      ? "mt-3"
+                      : "mt-3 grid grid-cols-2 gap-2"
+                  }
+                >
+                  {(post.photo_paths ?? []).map((path: string) => {
+                    const url = urlByPath.get(path);
+                    if (!url) return null;
+                    return (
+                      <a
+                        key={path}
+                        href={url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="block overflow-hidden rounded-md border border-emerald-900/10"
+                      >
+                        {/* Signed URLs expire, so Next's image optimizer would
+                            cache a URL that later 403s. Plain img avoids that. */}
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={url}
+                          alt="Photo shared by a resident"
+                          loading="lazy"
+                          className="h-full w-full object-cover"
+                        />
+                      </a>
+                    );
+                  })}
+                </div>
+              )}
 
               {postReplies.length > 0 && (
                 <ul className="mt-4 flex flex-col gap-3 border-l-2 border-emerald-900/10 pl-4">
