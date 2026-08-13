@@ -79,6 +79,16 @@ export default async function PortalHome() {
         </Link>
 
         <Link
+          href="/portal/board"
+          className="rounded-lg border border-emerald-900/10 bg-white p-6 transition-colors hover:border-emerald-700/40"
+        >
+          <h2 className="font-semibold text-emerald-950">Community Board</h2>
+          <p className="mt-1 text-sm text-stone-600">
+            Ask questions and discuss neighborhood topics.
+          </p>
+        </Link>
+
+        <Link
           href="/portal/pavilion"
           className="rounded-lg border border-emerald-900/10 bg-white p-6 transition-colors hover:border-emerald-700/40"
         >
