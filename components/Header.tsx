@@ -42,7 +42,7 @@ export default async function Header() {
               <Link href="/portal/home" className="hover:text-emerald-950">
                 My Portal
               </Link>
-              {profile.is_admin && (
+              {(profile.is_admin || profile.is_viewer) && (
                 <Link
                   href="/admin"
                   className="rounded-full bg-emerald-800 px-3 py-1 font-semibold text-white transition-colors hover:bg-emerald-900"

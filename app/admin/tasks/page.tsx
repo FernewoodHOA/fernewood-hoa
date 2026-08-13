@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { siteConfig } from "@/lib/site-config";
-import { createServerSupabase } from "@/lib/supabase/server";
+import { createServerSupabase, getCurrentProfile } from "@/lib/supabase/server";
 import { TASK_STATUSES, isOpen, daysSince, sortKey } from "@/lib/tasks";
 import TaskRow from "./TaskRow";
 import NewTaskForm from "./NewTaskForm";
@@ -13,6 +13,8 @@ export const metadata: Metadata = {
 export const dynamic = "force-dynamic";
 
 export default async function TasksPage() {
+  const profile = await getCurrentProfile();
+  const canEdit = Boolean(profile?.is_admin);
   const supabase = await createServerSupabase();
 
   const [{ data: tasks }, { data: events }] = await Promise.all([
@@ -63,7 +65,8 @@ export default async function TasksPage() {
           Action Items
         </h1>
         <p className="mt-2 max-w-2xl text-stone-600">
-          Issues the board is tracking. Visible to board members only.
+          Issues the board is tracking. Visible to board members only. Click
+          any item to update its status, record what happened, or delete it.
         </p>
       </div>
 
@@ -126,7 +129,7 @@ export default async function TasksPage() {
         </div>
       </section>
 
-      <NewTaskForm />
+      {canEdit && <NewTaskForm />}
 
       <section className="flex flex-col gap-4">
         <h2 className="text-xl font-bold tracking-tight text-emerald-950">
@@ -134,7 +137,12 @@ export default async function TasksPage() {
         </h2>
         <ul className="flex flex-col gap-3">
           {open.map((t) => (
-            <TaskRow key={t.id} task={t} events={eventsByTask.get(t.id) ?? []} />
+            <TaskRow
+              key={t.id}
+              task={t}
+              events={eventsByTask.get(t.id) ?? []}
+              canEdit={canEdit}
+            />
           ))}
         </ul>
         {open.length === 0 && (
@@ -149,7 +157,12 @@ export default async function TasksPage() {
           </h2>
           <ul className="flex flex-col gap-3">
             {closed.map((t) => (
-              <TaskRow key={t.id} task={t} events={eventsByTask.get(t.id) ?? []} />
+              <TaskRow
+                key={t.id}
+                task={t}
+                events={eventsByTask.get(t.id) ?? []}
+                canEdit={canEdit}
+              />
             ))}
           </ul>
         </section>

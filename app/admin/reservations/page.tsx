@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { siteConfig } from "@/lib/site-config";
-import { createServerSupabase } from "@/lib/supabase/server";
+import { createServerSupabase, getCurrentProfile } from "@/lib/supabase/server";
 import { formatDate, formatTime, todayIso } from "@/lib/reservations";
 import DecisionButtons from "./DecisionButtons";
 
@@ -12,6 +12,7 @@ export const metadata: Metadata = {
 export const dynamic = "force-dynamic";
 
 export default async function AdminReservationsPage() {
+  const canEdit = Boolean((await getCurrentProfile())?.is_admin);
   const supabase = await createServerSupabase();
   const today = todayIso();
 
@@ -68,7 +69,7 @@ export default async function AdminReservationsPage() {
                 {r.headcount ? ` · about ${r.headcount} people` : ""}
               </p>
               <div className="mt-4">
-                <DecisionButtons id={r.id} />
+                {canEdit && <DecisionButtons id={r.id} />}
               </div>
             </li>
           ))}

@@ -61,9 +61,11 @@ function DeleteButton() {
 export default function TaskRow({
   task,
   events,
+  canEdit = true,
 }: {
   task: Task;
   events: Event[];
+  canEdit?: boolean;
 }) {
   const [open, setOpen] = useState(false);
   const [saveState, save] = useActionState(updateTask, initial);
@@ -95,15 +97,44 @@ export default function TaskRow({
             {stale > 30 ? ` · no update in ${stale} days` : ""}
           </p>
         </div>
-        <span
-          className={`shrink-0 rounded-full border px-3 py-1 text-xs font-semibold ${info.tone}`}
-        >
-          {info.label}
+        <span className="flex shrink-0 items-center gap-3">
+          <span
+            className={`rounded-full border px-3 py-1 text-xs font-semibold ${info.tone}`}
+          >
+            {info.label}
+          </span>
+          {/* Without this the row gives no sign it opens an editor. */}
+          <span className="flex items-center gap-1 text-xs font-medium text-emerald-800">
+            {open ? "Close" : canEdit ? "Edit" : "Details"}
+            <svg
+              viewBox="0 0 20 20"
+              fill="currentColor"
+              aria-hidden="true"
+              className={`h-4 w-4 transition-transform ${open ? "rotate-180" : ""}`}
+            >
+              <path
+                fillRule="evenodd"
+                d="M5.23 7.21a.75.75 0 011.06.02L10 11.17l3.71-3.94a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+                clipRule="evenodd"
+              />
+            </svg>
+          </span>
         </span>
       </button>
 
       {open && (
         <div className="border-t border-emerald-900/10 p-4">
+          {!canEdit && (
+            <div className="mb-4 text-sm text-stone-700">
+              {task.notes ? (
+                <p className="whitespace-pre-wrap">{task.notes}</p>
+              ) : (
+                <p className="text-stone-500">No notes recorded.</p>
+              )}
+            </div>
+          )}
+
+          {canEdit && (
           <form action={save} className="flex flex-col gap-3">
             <input type="hidden" name="id" value={task.id} />
 
@@ -170,6 +201,7 @@ export default function TaskRow({
               )}
             </div>
           </form>
+          )}
 
           <div className="mt-5">
             <p className="text-xs font-semibold uppercase tracking-wide text-stone-500">
@@ -202,10 +234,12 @@ export default function TaskRow({
             </ul>
           </div>
 
-          <form action={remove} className="mt-4">
-            <input type="hidden" name="id" value={task.id} />
-            <DeleteButton />
-          </form>
+          {canEdit && (
+            <form action={remove} className="mt-4">
+              <input type="hidden" name="id" value={task.id} />
+              <DeleteButton />
+            </form>
+          )}
         </div>
       )}
     </li>

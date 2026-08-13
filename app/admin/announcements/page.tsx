@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { siteConfig } from "@/lib/site-config";
-import { createServerSupabase } from "@/lib/supabase/server";
+import { createServerSupabase, getCurrentProfile } from "@/lib/supabase/server";
 import AnnouncementForm from "./AnnouncementForm";
 import DeleteButton from "./DeleteButton";
 
@@ -12,6 +12,7 @@ export const metadata: Metadata = {
 export const dynamic = "force-dynamic";
 
 export default async function AdminAnnouncementsPage() {
+  const canEdit = Boolean((await getCurrentProfile())?.is_admin);
   const supabase = await createServerSupabase();
 
   const { data: announcements } = await supabase
@@ -37,7 +38,7 @@ export default async function AdminAnnouncementsPage() {
         </p>
       </div>
 
-      <AnnouncementForm residentCount={count ?? 0} />
+      {canEdit && <AnnouncementForm residentCount={count ?? 0} />}
 
       <section className="flex flex-col gap-4">
         <h2 className="text-xl font-bold tracking-tight text-emerald-950">
@@ -71,7 +72,7 @@ export default async function AdminAnnouncementsPage() {
                       : " · portal only"}
                   </p>
                 </div>
-                <DeleteButton id={a.id} />
+                {canEdit && <DeleteButton id={a.id} />}
               </div>
               <p className="mt-3 whitespace-pre-wrap text-sm text-stone-700">
                 {a.body}

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { siteConfig } from "@/lib/site-config";
-import { createServerSupabase } from "@/lib/supabase/server";
+import { createServerSupabase, getCurrentProfile } from "@/lib/supabase/server";
 import HandledToggle from "./HandledToggle";
 
 export const metadata: Metadata = {
@@ -11,6 +11,7 @@ export const metadata: Metadata = {
 export const dynamic = "force-dynamic";
 
 export default async function InquiriesPage() {
+  const canEdit = Boolean((await getCurrentProfile())?.is_admin);
   const supabase = await createServerSupabase();
   const { data: inquiries } = await supabase
     .from("board_inquiries")
@@ -65,7 +66,7 @@ export default async function InquiriesPage() {
                     {i.emailed ? "" : " · email notification failed"}
                   </p>
                 </div>
-                <HandledToggle id={i.id} handled={false} />
+                {canEdit && <HandledToggle id={i.id} handled={false} />}
               </div>
               <p className="mt-3 whitespace-pre-wrap text-sm text-stone-700">
                 {i.message}
@@ -94,7 +95,7 @@ export default async function InquiriesPage() {
                     {new Date(i.created_at).toLocaleDateString()}
                   </p>
                 </div>
-                <HandledToggle id={i.id} handled />
+                {canEdit && <HandledToggle id={i.id} handled />}
               </li>
             ))}
           </ul>

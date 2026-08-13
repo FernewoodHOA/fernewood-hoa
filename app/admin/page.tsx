@@ -13,7 +13,7 @@ export const dynamic = "force-dynamic";
 export default async function AdminHome() {
   const profile = await getCurrentProfile();
   if (!profile) redirect("/portal/login?next=/admin");
-  if (!profile.is_admin) redirect("/portal/home");
+  if (!profile.is_admin && !profile.is_viewer) redirect("/portal/home");
 
   const supabase = await createServerSupabase();
 
@@ -97,6 +97,12 @@ export default async function AdminHome() {
         <p className="mt-2 text-stone-600">
           Signed in as {profile.full_name}.
         </p>
+        {!profile.is_admin && profile.is_viewer && (
+          <p className="mt-3 rounded-md border border-sky-300 bg-sky-50 px-3 py-2 text-sm text-sky-900">
+            You have <strong>read-only</strong> access — you can see everything
+            the board is tracking, but changes are made by board members.
+          </p>
+        )}
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2">

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { siteConfig } from "@/lib/site-config";
-import { createServerSupabase } from "@/lib/supabase/server";
+import { createServerSupabase, getCurrentProfile } from "@/lib/supabase/server";
 import ReviewButtons from "./ReviewButtons";
 
 export const metadata: Metadata = {
@@ -10,6 +10,7 @@ export const metadata: Metadata = {
 export const dynamic = "force-dynamic";
 
 export default async function ApplicationsPage() {
+  const canEdit = Boolean((await getCurrentProfile())?.is_admin);
   const supabase = await createServerSupabase();
 
   // RLS restricts these rows to admins, so this returns nothing for anyone
@@ -83,7 +84,7 @@ export default async function ApplicationsPage() {
                 </p>
 
                 <div className="mt-4">
-                  <ReviewButtons id={app.id} />
+                  {canEdit && <ReviewButtons id={app.id} />}
                 </div>
               </li>
             ))}

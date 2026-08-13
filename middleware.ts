@@ -53,11 +53,13 @@ export async function middleware(request: NextRequest) {
   if (path.startsWith("/admin") && user) {
     const { data: profile } = await supabase
       .from("profiles")
-      .select("is_admin")
+      .select("is_admin, is_viewer")
       .eq("id", user.id)
       .single();
 
-    if (!profile?.is_admin) {
+    // Viewers may open the board pages; the write controls are hidden and the
+    // server actions re-check is_admin, so read-only really is read-only.
+    if (!profile?.is_admin && !profile?.is_viewer) {
       return NextResponse.redirect(new URL("/portal/home", request.url));
     }
   }
