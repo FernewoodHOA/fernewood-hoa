@@ -22,6 +22,7 @@ export default async function AdminHome() {
     { count: announcements },
     { count: inquiries },
     { count: pavilion },
+    { count: openTasks },
   ] = await Promise.all([
     supabase
       .from("applications")
@@ -36,9 +37,22 @@ export default async function AdminHome() {
       .from("reservations")
       .select("*", { count: "exact", head: true })
       .eq("status", "pending"),
+    supabase
+      .from("board_tasks")
+      .select("*", { count: "exact", head: true })
+      .lt("status", 5), // anything not Resolved
   ]);
 
   const tools = [
+    {
+      href: "/admin/tasks",
+      title: "Action Items",
+      body:
+        openTasks && openTasks > 0
+          ? `${openTasks} open`
+          : "Nothing open",
+      urgent: Boolean(openTasks && openTasks > 0),
+    },
     {
       href: "/admin/applications",
       title: "Access Requests",
