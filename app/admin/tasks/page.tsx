@@ -3,6 +3,8 @@ import Link from "next/link";
 import { siteConfig } from "@/lib/site-config";
 import { createServerSupabase, getCurrentProfile } from "@/lib/supabase/server";
 import { TASK_STATUSES, isOpen, daysSince, sortKey } from "@/lib/tasks";
+import { signTaskFiles, humanSize } from "@/lib/task-files";
+import type { Attachment } from "./Attachments";
 import TaskRow from "./TaskRow";
 import NewTaskForm from "./NewTaskForm";
 
@@ -44,6 +46,32 @@ export default async function TasksPage() {
     const list = eventsByTask.get(e.task_id) ?? [];
     list.push(e);
     eventsByTask.set(e.task_id, list);
+  }
+
+  // Attachments live in a private bucket, so every file needs a signed link.
+  // Sign them all in one call rather than one round trip per file.
+  const { data: fileRows } = await supabase
+    .from("board_task_files")
+    .select(
+      "id, task_id, path, file_name, mime_type, size_bytes, uploaded_by_name, created_at"
+    )
+    .order("created_at");
+
+  const signed = await signTaskFiles((fileRows ?? []).map((f) => f.path));
+  const filesByTask = new Map<string, Attachment[]>();
+  for (const f of fileRows ?? []) {
+    const list = filesByTask.get(f.task_id) ?? [];
+    list.push({
+      id: f.id,
+      file_name: f.file_name,
+      mime_type: f.mime_type,
+      sizeLabel: humanSize(f.size_bytes),
+      uploaded_by_name: f.uploaded_by_name,
+      created_at: f.created_at,
+      url: signed.get(f.path) ?? "",
+      isImage: (f.mime_type ?? "").startsWith("image/"),
+    });
+    filesByTask.set(f.task_id, list);
   }
 
   // Which issues come up most — tells the board where a global letter would
@@ -141,6 +169,7 @@ export default async function TasksPage() {
               key={t.id}
               task={t}
               events={eventsByTask.get(t.id) ?? []}
+              files={filesByTask.get(t.id) ?? []}
               canEdit={canEdit}
             />
           ))}
@@ -161,6 +190,7 @@ export default async function TasksPage() {
                 key={t.id}
                 task={t}
                 events={eventsByTask.get(t.id) ?? []}
+              files={filesByTask.get(t.id) ?? []}
                 canEdit={canEdit}
               />
             ))}

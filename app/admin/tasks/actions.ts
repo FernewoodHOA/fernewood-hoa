@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getCurrentProfile } from "@/lib/supabase/server";
 import { isOpen } from "@/lib/tasks";
+import { storeTaskFiles, deleteTaskFile } from "@/lib/task-files";
 
 export type TaskState = { status: "idle" | "ok" | "error"; message?: string };
 
@@ -96,14 +97,27 @@ export async function updateTask(
 
   if (error) return { status: "error", message: "Couldn't save that." };
 
-  // Only record history when the status actually moved, or a note was added.
-  // Otherwise editing a typo would clutter the timeline.
-  if (statusChanged || note) {
+  const files = formData
+    .getAll("files")
+    .filter((f): f is File => f instanceof File);
+  const stored = await storeTaskFiles(id, files, {
+    id: admin.id,
+    name: admin.full_name,
+  });
+  if (!stored.ok) return { status: "error", message: stored.message };
+
+  // Only record history when the status actually moved, a note was added, or
+  // files were attached. Otherwise fixing a typo would clutter the timeline.
+  if (statusChanged || note || stored.stored > 0) {
+    const fileNote =
+      stored.stored > 0
+        ? `${stored.stored} file${stored.stored === 1 ? "" : "s"} attached`
+        : "";
     await supabase.from("board_task_events").insert({
       task_id: id,
       from_status: existing.status,
       to_status: status,
-      note: note || null,
+      note: [note, fileNote].filter(Boolean).join(" · ") || null,
       changed_by: admin.id,
       changed_by_name: admin.full_name,
     });
@@ -111,7 +125,27 @@ export async function updateTask(
 
   revalidatePath("/admin/tasks");
   revalidatePath("/admin");
-  return { status: "ok", message: "Updated." };
+  return {
+    status: "ok",
+    message:
+      stored.stored > 0
+        ? `Updated, ${stored.stored} file${stored.stored === 1 ? "" : "s"} attached.`
+        : "Updated.",
+  };
+}
+
+export async function removeTaskFile(
+  _prev: TaskState,
+  formData: FormData
+): Promise<TaskState> {
+  const admin = await getCurrentProfile();
+  if (!admin?.is_admin) return { status: "error", message: "Not authorized." };
+
+  const ok = await deleteTaskFile(String(formData.get("file_id") ?? ""));
+  if (!ok) return { status: "error", message: "Couldn't remove that file." };
+
+  revalidatePath("/admin/tasks");
+  return { status: "ok", message: "File removed." };
 }
 
 export async function deleteTask(

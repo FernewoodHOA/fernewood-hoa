@@ -4,6 +4,7 @@ import { useActionState, useState } from "react";
 import { useFormStatus } from "react-dom";
 import { TASK_STATUSES, statusInfo, daysSince } from "@/lib/tasks";
 import { updateTask, deleteTask, type TaskState } from "./actions";
+import Attachments, { type Attachment } from "./Attachments";
 
 const initial: TaskState = { status: "idle" };
 
@@ -61,10 +62,12 @@ function DeleteButton() {
 export default function TaskRow({
   task,
   events,
+  files = [],
   canEdit = true,
 }: {
   task: Task;
   events: Event[];
+  files?: Attachment[];
   canEdit?: boolean;
 }) {
   const [open, setOpen] = useState(false);
@@ -135,7 +138,11 @@ export default function TaskRow({
           )}
 
           {canEdit && (
-          <form action={save} className="flex flex-col gap-3">
+          <form
+            action={save}
+            encType="multipart/form-data"
+            className="flex flex-col gap-3"
+          >
             <input type="hidden" name="id" value={task.id} />
 
             <div className="grid gap-3 sm:grid-cols-2">
@@ -186,6 +193,25 @@ export default function TaskRow({
               />
             </label>
 
+            <label className="flex flex-col gap-1 text-sm">
+              <span className="font-medium text-emerald-950">
+                Attach files{" "}
+                <span className="font-normal text-stone-500">(optional)</span>
+              </span>
+              <input
+                type="file"
+                name="files"
+                multiple
+                accept="application/pdf,image/*"
+                className="text-sm text-stone-700 file:mr-3 file:rounded-full file:border-0 file:bg-emerald-50 file:px-4 file:py-1.5 file:text-sm file:font-semibold file:text-emerald-800 hover:file:bg-emerald-100"
+              />
+              <span className="text-xs text-stone-500">
+                Renderings, plans, quotes, photos. PDFs are kept as-is; images
+                are resized and stripped of location data. Up to 6 files, 15 MB
+                each.
+              </span>
+            </label>
+
             <div className="flex items-center gap-4">
               <SaveButton />
               {saveState.status !== "idle" && saveState.message && (
@@ -202,6 +228,8 @@ export default function TaskRow({
             </div>
           </form>
           )}
+
+          <Attachments files={files} canEdit={canEdit} />
 
           <div className="mt-5">
             <p className="text-xs font-semibold uppercase tracking-wide text-stone-500">
