@@ -306,6 +306,38 @@ Reuses the approval queue and notification email built in Phase 2a.
   site (sunsetting Sept 1, 2026) — worth deciding whether to migrate before
   that shuts down.
 
+## Documents
+
+All association documents live in the **Fernewood Supabase project**, not on
+anyone's personal cloud storage. Before August 2026 the covenants page linked
+to a Google Drive folder owned by a resident who isn't on the board — and
+that account was nearly out of storage, so the page could have broken without
+warning.
+
+Two buckets:
+
+| Bucket | Visibility | Holds |
+|---|---|---|
+| `documents` | public | 11 phase covenants, enforcement, the revised phase list, 12 survey plats |
+| `board-documents` | private | Zoning 2006 Bass Property records — board only, served via 1-hour signed links at `/admin/documents` |
+
+About 33 MB of the free 1 GB. The plats were converted from ~100 MB of TIF
+scans to ~7 MB of PDF at a resolution where every municipal number is still
+legible.
+
+**To add or replace a document:** upload the PDF to the bucket in the
+Supabase dashboard, then add an entry in `lib/documents.ts`. Replacing a file
+needs no code change — overwrite it with the same name and the link keeps
+working.
+
+**The phase list PDF is generated, not hand-written.** Run
+`node scripts/build-phase-list-pdf.mjs` after changing
+`lib/restriction-guide.ts`, then re-upload, so the document and the website
+can't drift apart.
+
+The old Google Drive folder still exists as a backup. Nothing on the site
+points to it.
+
 ## Content maintenance notes
 - Board members are listed in `lib/board.ts` — update after each election.
 - The restriction guide (street → phase) lives in `lib/restriction-guide.ts`.
