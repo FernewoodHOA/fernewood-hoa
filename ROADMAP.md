@@ -139,12 +139,15 @@ can be corrected before 269 households see any of it.
 
 ## Action items — time-sensitive
 
-- **Rescue old InstantPage content before September 1, 2026.** The legacy
-  GoDaddy InstantPage site (separate product from the two free Websites +
-  Marketing subscriptions) still holds "Fernewood Magazine" content and
-  sunsets on that date. Board Members and Covenants have already been
-  rebuilt on the new site; Fernewood Magazine has not. Once InstantPage
-  shuts down, anything not exported is gone.
+- **The legacy GoDaddy InstantPage site sunsets September 1, 2026.** It held
+  Board Members, Covenants and a "Fernewood Magazine" page, all of which have
+  been rebuilt or superseded on the new site. **Nothing needs rescuing:**
+  Fernewood Magazine is a monthly neighbourhood publication whose files are
+  held by a third party, so the InstantPage page was only displaying content
+  that exists elsewhere. Letting it shut down loses nothing.
+  *(Earlier drafts of this roadmap treated this as an urgent rescue. That was
+  based on seeing the nav label in a screenshot without ever seeing the page
+  — the deadline was never real.)*
 - **Domain auto-renew is OFF.** fernewood.org is paid through
   **February 21, 2034**, but will not renew automatically. Either turn
   auto-renew on in GoDaddy, or make sure this expiry date is carried
