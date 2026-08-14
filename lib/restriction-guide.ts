@@ -69,7 +69,11 @@ export const restrictionGuide = [
   {
     phase: "Phase XII",
     streets: [
-      "602–810 Farmington",
+      // Plat check: Farmington in Phase XII starts at 606 (lots 291–294 are
+      // 606, 608, 610, 612), not 602. The 602–607 numbers below are Llansfair,
+      // which the original guide appears to have merged into the Farmington
+      // range by mistake.
+      "606–810 Farmington",
       "602–607 Llansfair",
       "129–131 Boss",
       // The Phase XII plat (March 1998) platted this cul-de-sac as Blenheim
