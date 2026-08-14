@@ -4,7 +4,9 @@ import { restrictionGuide } from "@/lib/restriction-guide";
 import {
   phaseDocuments,
   generalDocuments,
+  platDocuments,
   documentUrl,
+  platUrl,
   type Document,
 } from "@/lib/documents";
 
@@ -12,10 +14,16 @@ export const metadata: Metadata = {
   title: `Covenants & Restrictions | ${siteConfig.shortName}`,
 };
 
-function DocumentLink({ doc }: { doc: Document }) {
+function DocumentLink({
+  doc,
+  href,
+}: {
+  doc: Document;
+  href?: string;
+}) {
   return (
     <a
-      href={documentUrl(doc.file)}
+      href={href ?? documentUrl(doc.file)}
       target="_blank"
       rel="noopener noreferrer"
       className="flex items-start justify-between gap-3 rounded-lg border border-emerald-900/10 bg-white px-4 py-3 transition-colors hover:border-emerald-700/40"
@@ -65,6 +73,25 @@ export default function CovenantsPage() {
         <div className="flex flex-col gap-2">
           {generalDocuments.map((doc) => (
             <DocumentLink key={doc.file} doc={doc} />
+          ))}
+        </div>
+      </section>
+
+      <section className="flex flex-col gap-3">
+        <h2 className="text-xl font-bold tracking-tight text-emerald-950">
+          Survey plats
+        </h2>
+        <p className="max-w-2xl text-stone-600">
+          The recorded plats showing lot lines, street layouts and the original
+          house numbers for each phase.
+        </p>
+        <div className="grid gap-2 sm:grid-cols-2">
+          {platDocuments.map((doc) => (
+            <DocumentLink
+              key={doc.file}
+              doc={doc}
+              href={platUrl(doc.file)}
+            />
           ))}
         </div>
       </section>

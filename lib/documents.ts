@@ -7,8 +7,9 @@
  * change is needed to REPLACE a file — overwrite it with the same name and
  * the link keeps working.
  */
-const BASE =
-  "https://cxdhpkbxmofjlpgockac.supabase.co/storage/v1/object/public/documents/covenants";
+const BUCKET =
+  "https://cxdhpkbxmofjlpgockac.supabase.co/storage/v1/object/public/documents";
+const BASE = `${BUCKET}/covenants`;
 
 export type Document = {
   title: string;
@@ -60,6 +61,38 @@ export const boardDocuments: Document[] = [
 ];
 
 export const BOARD_BUCKET = "board-documents";
+
+/**
+ * Recorded survey plats — the authoritative source for lot lines, street
+ * names and municipal numbers. These are what resolved the phase gaps in the
+ * restriction guide, including Blenheim Drive's rename to Fernewood Drive.
+ *
+ * Converted from the original TIF scans to PDF (~100 MB down to ~7 MB) at a
+ * resolution where every municipal number stays legible.
+ */
+export const platDocuments: Document[] = [
+  {
+    title: "Master Plat",
+    file: "fernewood-master-plat.pdf",
+    size: "577 KB",
+    note: "The whole subdivision with phase boundaries.",
+  },
+  { title: "Phase I", file: "fernewood-phase-1-final-plat.pdf", size: "539 KB" },
+  { title: "Phase II", file: "fernewood-phase-2-final-plat.pdf", size: "566 KB" },
+  { title: "Phase III", file: "fernewood-phase-3-final-plat.pdf", size: "582 KB" },
+  { title: "Phase IV", file: "fernewood-phase-4-final-plat.pdf", size: "654 KB" },
+  { title: "Phase V", file: "fernewood-phase-5-final-plat.pdf", size: "578 KB" },
+  { title: "Phase VI", file: "fernewood-phase-6-final-plat.pdf", size: "568 KB" },
+  { title: "Phase VII", file: "fernewood-phase-7-final-plat.pdf", size: "514 KB" },
+  { title: "Phase VIII", file: "fernewood-phase-8-final-plat.pdf", size: "505 KB" },
+  { title: "Phase IX", file: "fernewood-phase-9-final-plat.pdf", size: "546 KB" },
+  { title: "Phase XI", file: "fernewood-phase-11-final-plat.pdf", size: "525 KB" },
+  { title: "Phase XII", file: "fernewood-phase-12-final-plat.pdf", size: "606 KB" },
+];
+
+export function platUrl(file: string): string {
+  return `${BUCKET}/plats/${file}`;
+}
 
 export function documentUrl(file: string): string {
   return `${BASE}/${file}`;
