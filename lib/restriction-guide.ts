@@ -6,7 +6,10 @@ export const restrictionGuide = [
   {
     phase: "Phase II",
     streets: [
-      "202 & 205–216 & 219 Waterford",
+      // The Phase II plat (Dec 1990) shows a clean run: 202–212 even on the
+      // north side, 211–219 odd on the south. The original guide's
+      // "202 & 205–216 & 219" skipped 204 and 217, which are plainly there.
+      "202–219 Waterford",
       "100–208 Remington",
       "201–303 Remington",
       "101 Westfield",
