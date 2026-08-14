@@ -69,7 +69,11 @@ export const restrictionGuide = [
       "602–810 Farmington",
       "602–607 Llansfair",
       "129–131 Boss",
-      "100–107 Blenheim Drive (all)",
+      // The Phase XII plat (March 1998) platted this cul-de-sac as Blenheim
+      // Drive, lots 312–319, municipal numbers 100–107. It was later renamed
+      // Fernewood Drive, which is why the original guide's "Blenheim" matched
+      // no one on the current roster.
+      "100–107 Fernewood Drive (all — platted as Blenheim Drive)",
     ],
   },
 ];
