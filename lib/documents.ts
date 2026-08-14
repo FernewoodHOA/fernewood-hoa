@@ -40,16 +40,26 @@ export const generalDocuments: Document[] = [
   },
   {
     title: "Properties Covered by Each Phase",
-    file: "restrictive-covenants-detail-of-properties-covered-by-various-phases.pdf",
-    size: "30 KB",
-    note: "The original phase-by-phase property list this website's guide is based on.",
+    file: "properties-covered-by-each-phase.pdf",
+    size: "3 KB",
+    note: "Revised 2026 — corrected against the recorded survey plats. Generated from this site's records by scripts/build-phase-list-pdf.mjs.",
   },
+];
+
+/**
+ * Board-only documents, held in the private `board-documents` bucket and
+ * reached through short-lived signed URLs. Not linked from any public page.
+ */
+export const boardDocuments: Document[] = [
   {
     title: "Zoning — 2006 Bass Property",
     file: "zoning-2006-bass-property-issues.pdf",
     size: "124 KB",
+    note: "Zoning dispute records. Board access only.",
   },
 ];
+
+export const BOARD_BUCKET = "board-documents";
 
 export function documentUrl(file: string): string {
   return `${BASE}/${file}`;

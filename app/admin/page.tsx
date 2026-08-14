@@ -78,6 +78,12 @@ export default async function AdminHome() {
       urgent: Boolean(inquiries && inquiries > 0),
     },
     {
+      href: "/admin/documents",
+      title: "Board Documents",
+      body: "Records not published to residents",
+      urgent: false,
+    },
+    {
       href: "/admin/reservations",
       title: "Park / Pavilion Requests",
       body:
