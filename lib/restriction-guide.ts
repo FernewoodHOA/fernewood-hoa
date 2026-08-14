@@ -78,7 +78,10 @@ export const restrictionGuide = [
       // which the original guide appears to have merged into the Farmington
       // range by mistake.
       "606–810 Farmington",
-      "602–607 Llansfair",
+      // Platted 602–607; the city later renumbered this block to 202–207,
+      // which is how residents know it today. Listed both ways so a search
+      // for either number finds it.
+      "202–207 Llansfair (platted as 602–607)",
       "129–131 Boss",
       // The Phase XII plat (March 1998) platted this cul-de-sac as Blenheim
       // Drive, lots 312–319, municipal numbers 100–107. It was later renamed
