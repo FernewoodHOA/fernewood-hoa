@@ -40,6 +40,9 @@ export const restrictionGuide = [
       "103–201 Westfield",
       "402–604 Waterside",
       "203 & 205 Waterside",
+      // Platted as 500 and 501 Waterside; the city later renumbered this
+      // corner onto Llansfair as 200 and 205.
+      "200 & 205 Llansfair (platted as 500 & 501 Waterside)",
       "102, 114 & 113 Llansfair",
       // Lots 144 and 145 were platted as 501 and 500 Farmington. The city
       // later renumbered them 601 and 600, which is how they appear on the
