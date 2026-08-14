@@ -47,7 +47,7 @@ export default function ContactPage() {
       <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_20rem]">
         <section>
           {formReady ? (
-            <ContactForm />
+            <ContactForm siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY} />
           ) : (
             <div className="max-w-lg rounded-lg border border-emerald-700/30 bg-emerald-50 p-5">
               <p className="font-medium text-emerald-900">

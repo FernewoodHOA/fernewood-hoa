@@ -3,6 +3,7 @@
 import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
 import { submitApplication, type ApplyState } from "./actions";
+import Turnstile from "@/components/Turnstile";
 
 const initialState: ApplyState = { status: "idle" };
 
@@ -22,7 +23,7 @@ function SubmitButton() {
 const fieldClass =
   "w-full rounded-md border border-emerald-900/20 bg-white px-3 py-2 text-sm text-stone-900 outline-none focus:border-emerald-700 focus:ring-1 focus:ring-emerald-700";
 
-export default function ApplyForm() {
+export default function ApplyForm({ siteKey }: { siteKey?: string }) {
   const [state, formAction] = useActionState(submitApplication, initialState);
 
   if (state.status === "success") {
@@ -44,6 +45,12 @@ export default function ApplyForm() {
           {state.message}
         </p>
       )}
+
+      {/* Honeypot — invisible to people, irresistible to bots. */}
+      <div aria-hidden="true" className="hidden">
+        <label htmlFor="website">Website</label>
+        <input id="website" name="website" tabIndex={-1} autoComplete="off" />
+      </div>
 
       <div className="flex flex-col gap-1">
         <label htmlFor="fullName" className="text-sm font-medium text-emerald-950">
@@ -108,6 +115,7 @@ export default function ApplyForm() {
         <textarea id="note" name="note" rows={3} className={fieldClass} />
       </div>
 
+      <Turnstile siteKey={siteKey} />
       <SubmitButton />
     </form>
   );

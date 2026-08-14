@@ -25,7 +25,7 @@ export default function ApplyPage() {
             The resident portal is limited to Fernewood homeowners. Fill out
             the form below and a board member will review your request.
           </p>
-          <ApplyForm />
+          <ApplyForm siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY} />
         </>
       ) : (
         <div className="max-w-xl rounded-lg border border-emerald-700/30 bg-emerald-50 p-5">

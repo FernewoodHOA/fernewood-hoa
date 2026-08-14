@@ -20,6 +20,7 @@ hand those off separately.
 | Vercel | jaredpolitz@gmail.com (via GitHub) | Hosting/deployment: fernewood-hoa.vercel.app | Created, live |
 | Supabase | Fernewood HOA org (free tier) | Auth + database + file storage. Project: "Fernewood HOA Website" | Created; portal schema applied |
 | Resend | jaredpolitz@gmail.com | Email delivery for the site (fernewood.org verified via DNS at GoDaddy) | Created, live |
+| Cloudflare | TBD | Turnstile spam protection on the public forms (free tier) | Needed only if spam continues; code is ready and inert without keys |
 
 ### Portal roles
 
@@ -81,6 +82,38 @@ This is a records question for the board, not a software bug: those
 households currently have no documented set of covenants. Worth confirming
 against the recorded filings before the directory or portal shows a phase
 for every resident.
+
+## Spam protection
+
+Real spam started arriving through the access-request form within hours of
+the board notification (random names and addresses, Gmail dot-trick
+addresses). Four layers, cheapest first:
+
+1. **Honeypot** — a hidden field on both public forms. A bot fills it, a
+   person can't see it. Submissions that fill it are silently discarded and
+   still shown a success message, so the bot doesn't learn to adapt.
+2. **Rate limiting** — 3 access requests / 5 contact messages per hour from
+   one connection. The submitter's IP is stored only as a salted hash, so
+   throttling doesn't turn the database into a log of who visited.
+3. **Roster matching** — the board email already says whether the address
+   matches the resident roster. Spam never matches. Not yet used to suppress
+   notifications; see below.
+4. **Cloudflare Turnstile** — free, no usage cap, and usually invisible to
+   the visitor. Chosen over Google reCAPTCHA, which would track every
+   resident who fills in a form.
+
+**Turnstile is written but inert until the keys are set.** With
+`NEXT_PUBLIC_TURNSTILE_SITE_KEY` and `TURNSTILE_SECRET_KEY` blank, the
+verification passes automatically and no widget renders — so the site keeps
+working if the Cloudflare account is ever closed or a key rotated.
+
+**Still available if spam persists:** stop emailing the board for
+applications whose address doesn't match the roster. They'd still be stored,
+still appear in the queue with the amber "No roster match" badge, and still
+count on the Board Tools tile — just no email. The trade-off is that a
+genuine resident whose address doesn't match (the 8 Fernewood Drive homes,
+for instance) would also go un-emailed and rely on someone checking the
+queue.
 
 ## Launch sequence
 

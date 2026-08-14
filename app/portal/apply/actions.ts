@@ -4,6 +4,8 @@ import { headers } from "next/headers";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { normalizeAddress } from "@/lib/address";
 import { sendBoardEmail } from "@/lib/email";
+import { callerHash, isRateLimited } from "@/lib/rate-limit";
+import { verifyTurnstile } from "@/lib/turnstile";
 
 export type ApplyState = {
   status: "idle" | "success" | "error";
@@ -19,6 +21,17 @@ export async function submitApplication(
   _prev: ApplyState,
   formData: FormData
 ): Promise<ApplyState> {
+  // Honeypot: hidden field only a bot fills in. Report success so it doesn't
+  // learn to try something else.
+  if (String(formData.get("website") ?? "").trim() !== "") {
+    return {
+      status: "success",
+      message:
+        "Thanks — your application has been submitted. A board member will " +
+        "review it and you'll receive an email once your access is approved.",
+    };
+  }
+
   const fullName = String(formData.get("fullName") ?? "").trim();
   const address = String(formData.get("address") ?? "").trim();
   const email = String(formData.get("email") ?? "").trim();
@@ -43,6 +56,29 @@ export async function submitApplication(
       status: "error",
       message:
         "The portal isn't accepting applications yet. Please try again later.",
+    };
+  }
+
+  const passed = await verifyTurnstile(
+    String(formData.get("cf-turnstile-response") ?? "") || null
+  );
+  if (!passed) {
+    return {
+      status: "error",
+      message:
+        "We couldn't verify that you're a person. Please reload the page and " +
+        "try again.",
+    };
+  }
+
+  const ipHash = await callerHash();
+  if (await isRateLimited("applications", ipHash, 3)) {
+    return {
+      status: "error",
+      message:
+        "We've already received several requests from this connection. " +
+        "Please wait a little while, or call the association office on " +
+        "(337) 364-7221.",
     };
   }
 
@@ -90,6 +126,7 @@ export async function submitApplication(
     phone: phone || null,
     note: note || null,
     matched_resident_id: match?.id ?? null,
+    ip_hash: ipHash,
   });
 
   if (error) {

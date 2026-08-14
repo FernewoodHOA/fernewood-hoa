@@ -2,6 +2,8 @@
 
 import { createAdminClient } from "@/lib/supabase/admin";
 import { sendBoardEmail } from "@/lib/email";
+import { callerHash, isRateLimited } from "@/lib/rate-limit";
+import { verifyTurnstile } from "@/lib/turnstile";
 
 export type ContactState = {
   status: "idle" | "success" | "error";
@@ -54,11 +56,40 @@ export async function submitInquiry(
     };
   }
 
+  const passed = await verifyTurnstile(
+    String(formData.get("cf-turnstile-response") ?? "") || null
+  );
+  if (!passed) {
+    return {
+      status: "error",
+      message:
+        "We couldn't verify that you're a person. Please reload the page and " +
+        "try again.",
+    };
+  }
+
+  const ipHash = await callerHash();
+  if (await isRateLimited("board_inquiries", ipHash, 5)) {
+    return {
+      status: "error",
+      message:
+        "We've already received several messages from this connection. " +
+        "Please wait a little while, or call the association office at " +
+        "(337) 364-7221.",
+    };
+  }
+
   // Store first. Email is best-effort on top of a durable record, so a
   // delivery failure never loses the resident's message.
   const { data: inserted, error } = await supabase
     .from("board_inquiries")
-    .insert({ name, email, subject: subject || null, message })
+    .insert({
+      name,
+      email,
+      subject: subject || null,
+      message,
+      ip_hash: ipHash,
+    })
     .select("id")
     .single();
 

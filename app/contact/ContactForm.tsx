@@ -3,6 +3,7 @@
 import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
 import { submitInquiry, type ContactState } from "./actions";
+import Turnstile from "@/components/Turnstile";
 
 const initialState: ContactState = { status: "idle" };
 
@@ -22,7 +23,7 @@ function SubmitButton() {
   );
 }
 
-export default function ContactForm() {
+export default function ContactForm({ siteKey }: { siteKey?: string }) {
   const [state, formAction] = useActionState(submitInquiry, initialState);
 
   if (state.status === "success") {
@@ -102,6 +103,7 @@ export default function ContactForm() {
         )}
       </div>
 
+      <Turnstile siteKey={siteKey} />
       <SubmitButton />
     </form>
   );
