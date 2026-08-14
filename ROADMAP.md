@@ -305,6 +305,21 @@ Reuses the approval queue and notification email built in Phase 2a.
 - Handoff documentation for whoever eventually takes over maintenance.
 
 ## Backlog / not yet scoped
+
+### Resident-submitted renovation proposals — considered, deliberately deferred
+
+Today a homeowner emails their plans and a board member attaches them to the
+action item by hand. A resident-facing upload form would remove that step.
+
+**Not worth building yet.** These come up 1–3 times a year (2026 estimate),
+so the manual step costs a board member a couple of minutes annually, while
+the feature would add a submission form, a review queue, notifications, and
+another place for residents to get stuck. Re-open this if the volume changes
+— several a month would flip the maths.
+
+Most of the pieces already exist if it is ever wanted: `board_task_files`
+handles storage and EXIF stripping, and the apply→approve→notify pattern is
+already built twice (portal access, pavilion reservations).
 - "Fernewood Magazine" content that existed on the old GoDaddy InstantPage
   site (sunsetting Sept 1, 2026) — worth deciding whether to migrate before
   that shuts down.
