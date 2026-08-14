@@ -41,7 +41,11 @@ export const restrictionGuide = [
       "402–604 Waterside",
       "203 & 205 Waterside",
       "102, 114 & 113 Llansfair",
-      "509, 510, 500 & 501 Farmington",
+      // Lots 144 and 145 were platted as 501 and 500 Farmington. The city
+      // later renumbered them 601 and 600, which is how they appear on the
+      // current roster — the same kind of post-plat renumbering that turned
+      // Blenheim Drive into Fernewood Drive.
+      "509, 510, 500 & 501 Farmington (500/501 now numbered 600/601)",
       "100 & 101 Sedgefield",
       "100 & 101 Barrington",
     ],
