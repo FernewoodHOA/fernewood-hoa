@@ -28,6 +28,8 @@ export default function ProfileForm({
     email: string | null;
     address: string | null;
     in_directory: boolean;
+    show_address: boolean;
+    linked: boolean;
     show_phone: boolean;
     show_email: boolean;
   };
@@ -75,20 +77,38 @@ export default function ProfileForm({
         />
       </div>
 
-      <div className="rounded-lg border border-emerald-900/10 bg-stone-50 p-4">
-        <p className="text-sm font-medium text-emerald-950">
-          Set by the board
-        </p>
-        <p className="mt-1 text-sm text-stone-600">
-          Address: {profile.address ?? "not linked"}
-          <br />
-          Sign-in email: {profile.email ?? "—"}
-        </p>
-        <p className="mt-2 text-xs text-stone-500">
-          Your property address determines which covenants apply to you, so
-          only the board can change it. Contact them if it&apos;s wrong.
-        </p>
-      </div>
+      {profile.linked ? (
+        <div className="rounded-lg border border-emerald-900/10 bg-stone-50 p-4">
+          <p className="text-sm font-medium text-emerald-950">Set by the board</p>
+          <p className="mt-1 text-sm text-stone-600">
+            Address: {profile.address ?? "not linked"}
+            <br />
+            Sign-in email: {profile.email ?? "—"}
+          </p>
+          <p className="mt-2 text-xs text-stone-500">
+            Your property address determines which covenants apply to you, so
+            only the board can change it. Contact them if it&apos;s wrong.
+          </p>
+        </div>
+      ) : (
+        <div className="flex flex-col gap-1">
+          <label htmlFor="address" className="text-sm font-medium text-emerald-950">
+            Your Fernewood address
+          </label>
+          <input
+            id="address"
+            name="address"
+            defaultValue={profile.address ?? ""}
+            placeholder="e.g. 306 Englewood Dr"
+            className="w-full rounded-md border border-emerald-900/20 bg-white px-3 py-2 text-sm outline-none focus:border-emerald-700 focus:ring-1 focus:ring-emerald-700"
+          />
+          <p className="text-xs text-stone-500">
+            Links your account to the association records so the site knows
+            which covenant phase applies to you. Adding it here does not
+            publish it — that&apos;s the separate choice below.
+          </p>
+        </div>
+      )}
 
       <fieldset className="flex flex-col gap-3">
         <legend className="text-sm font-medium text-emerald-950">
@@ -105,7 +125,22 @@ export default function ProfileForm({
           <span>
             List me in the resident directory
             <span className="block text-xs text-stone-500">
-              Other signed-in residents will see your name, address, and phase.
+              Other signed-in residents will see your name, plus whatever you choose to show below.
+            </span>
+          </span>
+        </label>
+
+        <label className="flex items-start gap-2 text-sm text-stone-700">
+          <input
+            type="checkbox"
+            name="show_address"
+            defaultChecked={profile.show_address}
+            className="mt-0.5"
+          />
+          <span>
+            Show my street address
+            <span className="block text-xs text-stone-500">
+              Untick to appear by name only. Only applies if you&apos;re listed.
             </span>
           </span>
         </label>
