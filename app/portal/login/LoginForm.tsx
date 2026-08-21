@@ -3,6 +3,7 @@
 import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
 import { sendMagicLink, type LoginState } from "./actions";
+import Turnstile from "@/components/Turnstile";
 
 const initialState: LoginState = { status: "idle" };
 
@@ -19,7 +20,13 @@ function SubmitButton() {
   );
 }
 
-export default function LoginForm({ next }: { next: string }) {
+export default function LoginForm({
+  next,
+  siteKey,
+}: {
+  next: string;
+  siteKey?: string;
+}) {
   const [state, formAction] = useActionState(sendMagicLink, initialState);
 
   if (state.status === "sent") {
@@ -34,6 +41,19 @@ export default function LoginForm({ next }: { next: string }) {
   return (
     <form action={formAction} className="flex max-w-sm flex-col gap-4">
       <input type="hidden" name="next" value={next} />
+
+      {/*
+        Honeypot. Hidden from people and from screen readers, so anything that
+        fills it in is a bot. Kept out of the tab order too.
+      */}
+      <input
+        type="text"
+        name="website"
+        tabIndex={-1}
+        autoComplete="off"
+        aria-hidden="true"
+        className="hidden"
+      />
 
       {state.status === "error" && state.message && (
         <p
@@ -61,6 +81,7 @@ export default function LoginForm({ next }: { next: string }) {
         </p>
       </div>
 
+      <Turnstile siteKey={siteKey} />
       <SubmitButton />
     </form>
   );

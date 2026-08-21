@@ -28,7 +28,7 @@ export async function callerHash(): Promise<string | null> {
  * Fails open: if the check itself errors, a genuine resident is not blocked.
  */
 export async function isRateLimited(
-  table: "applications" | "board_inquiries",
+  table: "applications" | "board_inquiries" | "login_attempts",
   hash: string | null,
   max: number
 ): Promise<boolean> {

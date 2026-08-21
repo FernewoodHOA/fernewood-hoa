@@ -49,7 +49,10 @@ export default async function LoginPage({
         </p>
       )}
 
-      <LoginForm next={next} />
+      <LoginForm
+        next={next}
+        siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
+      />
 
       <p className="border-t border-emerald-900/10 pt-5 text-sm text-stone-600">
         <span className="font-medium text-emerald-950">
