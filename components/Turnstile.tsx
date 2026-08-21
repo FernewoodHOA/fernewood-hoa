@@ -8,6 +8,7 @@ declare global {
     turnstile?: {
       render: (el: HTMLElement, opts: Record<string, unknown>) => string;
       remove: (id: string) => void;
+      reset: (id: string) => void;
     };
   }
 }
@@ -18,10 +19,35 @@ declare global {
  *
  * Renders nothing when no site key is configured, so the forms work unchanged
  * before Cloudflare is set up.
+ *
+ * `onToken` reports the current token, or null when there isn't one yet or it
+ * expired. A form can use that to hold the submit button until the check has
+ * actually run — without it, submitting before the widget finishes sends an
+ * empty token and the server rejects a real person.
+ *
+ * `resetKey` resets the widget when its value changes. Turnstile tokens are
+ * single use, so after a failed submission the old token is spent; re-issuing
+ * one is what stops the form getting stuck on "we couldn't verify that you're
+ * a person" until the visitor thinks to reload.
  */
-export default function Turnstile({ siteKey }: { siteKey?: string }) {
+export default function Turnstile({
+  siteKey,
+  onToken,
+  resetKey = 0,
+}: {
+  siteKey?: string;
+  onToken?: (token: string | null) => void;
+  resetKey?: number;
+}) {
   const ref = useRef<HTMLDivElement>(null);
   const widgetId = useRef<string | null>(null);
+
+  // Held in a ref so the render effect doesn't re-run (and re-create the
+  // widget) every time the parent passes a new inline function.
+  const onTokenRef = useRef(onToken);
+  useEffect(() => {
+    onTokenRef.current = onToken;
+  }, [onToken]);
 
   useEffect(() => {
     if (!siteKey) return;
@@ -32,6 +58,9 @@ export default function Turnstile({ siteKey }: { siteKey?: string }) {
       widgetId.current = window.turnstile.render(el, {
         sitekey: siteKey,
         theme: "light",
+        callback: (token: string) => onTokenRef.current?.(token),
+        "expired-callback": () => onTokenRef.current?.(null),
+        "error-callback": () => onTokenRef.current?.(null),
       });
     }
 
@@ -46,6 +75,19 @@ export default function Turnstile({ siteKey }: { siteKey?: string }) {
       }
     };
   }, [siteKey]);
+
+  // Spend-and-reissue. Skipped on first render — there is nothing to reset yet.
+  const firstRun = useRef(true);
+  useEffect(() => {
+    if (firstRun.current) {
+      firstRun.current = false;
+      return;
+    }
+    if (widgetId.current && window.turnstile) {
+      window.turnstile.reset(widgetId.current);
+      onTokenRef.current?.(null);
+    }
+  }, [resetKey]);
 
   if (!siteKey) return null;
 

@@ -1,21 +1,25 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useEffect, useState } from "react";
 import { useFormStatus } from "react-dom";
 import { sendMagicLink, type LoginState } from "./actions";
 import Turnstile from "@/components/Turnstile";
 
 const initialState: LoginState = { status: "idle" };
 
-function SubmitButton() {
+function SubmitButton({ waiting }: { waiting: boolean }) {
   const { pending } = useFormStatus();
   return (
     <button
       type="submit"
-      disabled={pending}
+      disabled={pending || waiting}
       className="w-fit rounded-full bg-emerald-800 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-emerald-900 disabled:opacity-60"
     >
-      {pending ? "Sending…" : "Email me a sign-in link"}
+      {pending
+        ? "Sending…"
+        : waiting
+          ? "Checking you're not a robot…"
+          : "Email me a sign-in link"}
     </button>
   );
 }
@@ -28,6 +32,21 @@ export default function LoginForm({
   siteKey?: string;
 }) {
   const [state, formAction] = useActionState(sendMagicLink, initialState);
+
+  // Turnstile tokens are single use. Hold the button until one arrives, and
+  // re-issue after a rejected submission so a resident who mistypes their
+  // address isn't then told they're a robot.
+  const [token, setToken] = useState<string | null>(null);
+  const [resetKey, setResetKey] = useState(0);
+
+  useEffect(() => {
+    if (state.status === "error") {
+      setToken(null);
+      setResetKey((n) => n + 1);
+    }
+  }, [state]);
+
+  const waitingForTurnstile = Boolean(siteKey) && token === null;
 
   if (state.status === "sent") {
     return (
@@ -81,8 +100,8 @@ export default function LoginForm({
         </p>
       </div>
 
-      <Turnstile siteKey={siteKey} />
-      <SubmitButton />
+      <Turnstile siteKey={siteKey} onToken={setToken} resetKey={resetKey} />
+      <SubmitButton waiting={waitingForTurnstile} />
     </form>
   );
 }

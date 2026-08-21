@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -31,6 +32,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <Header />
         <main className="flex-1">{children}</main>
         <Footer />
+        {/*
+          Vercel Web Analytics: page views and referrers, no cookies and no
+          cross-site tracking, so it needs no consent banner. Counts only from
+          the deploy that introduces it — there is no backfill. Removing it is
+          deleting this line and the import.
+        */}
+        <Analytics />
       </body>
     </html>
   );

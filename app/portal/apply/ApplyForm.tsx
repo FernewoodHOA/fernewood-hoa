@@ -1,21 +1,25 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useEffect, useState } from "react";
 import { useFormStatus } from "react-dom";
 import { submitApplication, type ApplyState } from "./actions";
 import Turnstile from "@/components/Turnstile";
 
 const initialState: ApplyState = { status: "idle" };
 
-function SubmitButton() {
+function SubmitButton({ waiting }: { waiting: boolean }) {
   const { pending } = useFormStatus();
   return (
     <button
       type="submit"
-      disabled={pending}
+      disabled={pending || waiting}
       className="w-fit rounded-full bg-emerald-800 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-emerald-900 disabled:opacity-60"
     >
-      {pending ? "Submitting…" : "Submit Request"}
+      {pending
+        ? "Submitting…"
+        : waiting
+          ? "Checking you're not a robot…"
+          : "Submit Request"}
     </button>
   );
 }
@@ -25,6 +29,21 @@ const fieldClass =
 
 export default function ApplyForm({ siteKey }: { siteKey?: string }) {
   const [state, formAction] = useActionState(submitApplication, initialState);
+
+  // Turnstile tokens are single use, and this form re-renders in place on a
+  // validation error — so without re-issuing, an applicant who mistypes their
+  // address is then told they're a robot and has to reload to escape.
+  const [token, setToken] = useState<string | null>(null);
+  const [resetKey, setResetKey] = useState(0);
+
+  useEffect(() => {
+    if (state.status === "error") {
+      setToken(null);
+      setResetKey((n) => n + 1);
+    }
+  }, [state]);
+
+  const waitingForTurnstile = Boolean(siteKey) && token === null;
 
   if (state.status === "success") {
     return (
@@ -115,8 +134,8 @@ export default function ApplyForm({ siteKey }: { siteKey?: string }) {
         <textarea id="note" name="note" rows={3} className={fieldClass} />
       </div>
 
-      <Turnstile siteKey={siteKey} />
-      <SubmitButton />
+      <Turnstile siteKey={siteKey} onToken={setToken} resetKey={resetKey} />
+      <SubmitButton waiting={waitingForTurnstile} />
     </form>
   );
 }
